@@ -1,0 +1,131 @@
+[gd_scene load_steps=11 format=3 uid="uid://dj24b7mtqacsp"]
+
+[ext_resource type="Texture2D" uid="uid://bc6rytedujehx" path="res://Assets/panel.png" id="1_6uyim"]
+[ext_resource type="Script" uid="uid://buua7elmpnu3d" path="res://Scene/setting_panel.gd" id="1_eohg8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eddde"]
+bg_color = Color(0.6059, 0.74036, 0.83, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eohg8"]
+bg_color = Color(0.765214, 0.930547, 1, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(1, 0.910757, 0.953091, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_6uyim"]
+font_size = 26
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6uyim"]
+bg_color = Color(0.762646, 0.873526, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qkqw6"]
+bg_color = Color(0.6, 0.6, 0.6, 0.443137)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fitx8"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vk7jq"]
+bg_color = Color(0.72, 0.60864, 0.3024, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vdubw"]
+bg_color = Color(0.91, 0.74256, 0.4732, 1)
+
+[node name="SettingPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_eohg8")
+
+[node name="Panel" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 607.0
+offset_bottom = 696.0
+scale = Vector2(0.7, 0.7)
+mouse_filter = 0
+texture = ExtResource("1_6uyim")
+
+[node name="work_btn" type="Button" parent="Panel"]
+layout_mode = 2
+offset_left = 111.429
+offset_top = 390.0
+offset_right = 415.429
+offset_bottom = 489.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/hover = SubResource("StyleBoxFlat_eddde")
+theme_override_styles/normal = SubResource("StyleBoxFlat_eohg8")
+text = "开始工作
+"
+
+[node name="Label1" type="Label" parent="Panel"]
+layout_mode = 2
+offset_left = 104.286
+offset_top = 224.286
+offset_right = 356.286
+offset_bottom = 274.286
+grow_horizontal = 2
+grow_vertical = 2
+text = "工作时长（分钟）："
+label_settings = SubResource("LabelSettings_6uyim")
+
+[node name="SpinBox1" type="SpinBox" parent="Panel/Label1"]
+layout_mode = 2
+offset_left = 230.0
+offset_top = -3.99998
+offset_right = 317.0
+offset_bottom = 49.0
+theme_override_colors/up_icon_modulate = Color(0, 0, 0, 1)
+theme_override_colors/down_disabled_icon_modulate = Color(0, 0, 0, 1)
+theme_override_styles/field_and_buttons_separator = SubResource("StyleBoxFlat_6uyim")
+step = 0.1
+
+[node name="rest_btn" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 388.0
+offset_top = 56.0
+offset_right = 511.0
+offset_bottom = 186.0
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_qkqw6")
+theme_override_styles/normal = SubResource("StyleBoxFlat_fitx8")
+
+[node name="Label2" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 104.286
+offset_top = 310.0
+offset_right = 356.286
+offset_bottom = 360.0
+text = "休息时长（分钟）："
+label_settings = SubResource("LabelSettings_6uyim")
+
+[node name="SpinBox2" type="SpinBox" parent="Panel/Label2"]
+layout_mode = 0
+offset_left = 228.571
+offset_top = -2.85709
+offset_right = 315.571
+offset_bottom = 50.1429
+theme_override_colors/up_icon_modulate = Color(0, 0, 0, 1)
+theme_override_colors/down_disabled_icon_modulate = Color(0, 0, 0, 1)
+theme_override_styles/field_and_buttons_separator = SubResource("StyleBoxFlat_6uyim")
+step = 0.1
+
+[node name="log_btn" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 208.571
+offset_top = 517.143
+offset_right = 325.571
+offset_bottom = 556.143
+theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/pressed = SubResource("StyleBoxFlat_vk7jq")
+theme_override_styles/normal = SubResource("StyleBoxFlat_vdubw")
+text = "导出日志"
+
+[connection signal="pressed" from="Panel/log_btn" to="." method="_on_log_btn_pressed"]

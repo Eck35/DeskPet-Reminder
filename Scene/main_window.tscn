@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://d3aixsxwsrf8t"]
+
+[ext_resource type="Script" uid="uid://bbxgi03vyqlkj" path="res://Scene/main_window.gd" id="1_aurhl"]
+[ext_resource type="PackedScene" uid="uid://dlh7m2of7ogsk" path="res://Scene/character.tscn" id="1_wxieh"]
+[ext_resource type="PackedScene" uid="uid://dj24b7mtqacsp" path="res://Scene/SettingPanel.tscn" id="3_jp3cc"]
+
+[node name="MainWindow" type="Control"]
+layout_mode = 3
+anchor_right = 2.742
+anchor_bottom = 4.174
+offset_left = -3002.0
+offset_top = 739.0
+offset_right = -1331.76
+offset_bottom = 1071.72
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_aurhl")
+
+[node name="Character" parent="." instance=ExtResource("1_wxieh")]
+position = Vector2(3144, -689)
+
+[node name="SettingPanel" parent="." instance=ExtResource("3_jp3cc")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3043.0
+offset_top = -683.0
+offset_right = 90.0
+offset_bottom = -3011.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WorkTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="UITimer" type="Timer" parent="."]
+autostart = true
+
+[node name="DarkOverlay" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 2299.0
+offset_top = -937.0
+offset_right = 3640.0
+offset_bottom = -208.0
+mouse_filter = 2
+color = Color(0.49, 0.46501, 0.4018, 0.352941)
+
+[node name="ReminderTimer" type="Timer" parent="."]
+
+[node name="RestTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="WorkTimer" to="." method="_on_work_timer_timeout"]
+[connection signal="timeout" from="UITimer" to="." method="_on_ui_timer_timeout"]

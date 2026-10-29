@@ -1,0 +1,85 @@
+[gd_scene load_steps=8 format=3 uid="uid://dj24b7mtqacsp"]
+
+[ext_resource type="Texture2D" uid="uid://bc6rytedujehx" path="res://Assets/panel.png" id="1_6uyim"]
+[ext_resource type="Script" uid="uid://buua7elmpnu3d" path="res://Scene/setting_panel.gd" id="1_eohg8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6uyim"]
+bg_color = Color(0.762646, 0.873526, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eddde"]
+bg_color = Color(0.6059, 0.74036, 0.83, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eohg8"]
+bg_color = Color(0.765214, 0.930547, 1, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(1, 0.910757, 0.953091, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_6uyim"]
+font_size = 26
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6uyim"]
+radius = 74.0
+
+[node name="SettingPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_eohg8")
+
+[node name="Panel" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 607.0
+offset_bottom = 696.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("1_6uyim")
+
+[node name="SpinBox" type="SpinBox" parent="Panel"]
+layout_mode = 2
+offset_left = 330.0
+offset_top = 219.0
+offset_right = 417.0
+offset_bottom = 272.0
+theme_override_colors/up_icon_modulate = Color(0, 0, 0, 1)
+theme_override_colors/down_disabled_icon_modulate = Color(0, 0, 0, 1)
+theme_override_styles/field_and_buttons_separator = SubResource("StyleBoxFlat_6uyim")
+
+[node name="Button" type="Button" parent="Panel"]
+layout_mode = 2
+offset_left = 120.0
+offset_top = 335.0
+offset_right = 424.0
+offset_bottom = 434.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/hover = SubResource("StyleBoxFlat_eddde")
+theme_override_styles/normal = SubResource("StyleBoxFlat_eohg8")
+text = "开始工作
+"
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 2
+offset_left = 100.0
+offset_top = 223.0
+offset_right = 352.0
+offset_bottom = 273.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "工作时长（分钟）："
+label_settings = SubResource("LabelSettings_6uyim")
+
+[node name="exit" type="Area2D" parent="Panel"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Panel/exit"]
+position = Vector2(446, 118)
+shape = SubResource("CircleShape2D_6uyim")
+
+[connection signal="input_event" from="Panel/exit" to="." method="_on_exit_input_event"]
