@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dlh7m2of7ogsk"]
+[gd_scene format=3 uid="uid://dlh7m2of7ogsk"]
 
 [ext_resource type="Script" uid="uid://508i4fmpolx2" path="res://Scene/character.gd" id="1_b6o27"]
 [ext_resource type="Texture2D" uid="uid://4ggctwdl4cin" path="res://Assets/sprite_0.png" id="2_ep1am"]
@@ -164,70 +164,70 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bosnt"]
 size = Vector2(174, 208)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_087ws"]
-bg_color = Color(0.3306, 0.57, 0.1596, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inwfv"]
 bg_color = Color(0.4278, 0.93, 0.55335, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmtgg"]
-bg_color = Color(0.6, 0.156, 0.156, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_087ws"]
+bg_color = Color(0.3306, 0.57, 0.1596, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5qeau"]
 bg_color = Color(1, 0.32, 0.32, 1)
 
-[node name="Character" type="Node2D"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmtgg"]
+bg_color = Color(0.6, 0.156, 0.156, 1)
+
+[node name="Character" type="Node2D" unique_id=1208928100]
 script = ExtResource("1_b6o27")
 
-[node name="人物本体" type="AnimatedSprite2D" parent="."]
-position = Vector2(208, 357)
+[node name="人物本体" type="AnimatedSprite2D" parent="." unique_id=369623886]
+position = Vector2(318, 250)
 scale = Vector2(0.6, 0.6)
 sprite_frames = SubResource("SpriteFrames_ep1am")
+animation = &"eye"
 
-[node name="Area2D" type="Area2D" parent="人物本体"]
+[node name="Area2D" type="Area2D" parent="人物本体" unique_id=525573158]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="人物本体/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="人物本体/Area2D" unique_id=979425862]
 position = Vector2(-36.8125, 5.875)
 shape = SubResource("RectangleShape2D_b6o27")
 
-[node name="设置气泡" type="AnimatedSprite2D" parent="."]
-position = Vector2(114, 266)
+[node name="设置气泡" type="AnimatedSprite2D" parent="." unique_id=2011406770]
+position = Vector2(211, 222)
 scale = Vector2(0.6, 0.6)
 sprite_frames = SubResource("SpriteFrames_1cgd8")
 frame_progress = 0.490537
 
-[node name="Area2D_2" type="Area2D" parent="设置气泡"]
+[node name="Area2D_2" type="Area2D" parent="设置气泡" unique_id=1962785802]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="设置气泡/Area2D_2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="设置气泡/Area2D_2" unique_id=1957625846]
 position = Vector2(-56, -22)
 shape = SubResource("RectangleShape2D_bosnt")
 
-[node name="TimerBubble" type="Node2D" parent="."]
+[node name="TimerBubble" type="Node2D" parent="." unique_id=380327735]
 visible = false
-position = Vector2(-111, 91)
 
-[node name="Sprite2D" type="Sprite2D" parent="TimerBubble"]
+[node name="Sprite2D" type="Sprite2D" parent="TimerBubble" unique_id=1707643004]
 position = Vector2(395, 201)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("6_2ht62")
 
-[node name="TimeLabel" type="Label" parent="TimerBubble"]
+[node name="TimeLabel" type="Label" parent="TimerBubble" unique_id=499421310]
 offset_left = 383.0
 offset_top = 174.0
 offset_right = 443.0
 offset_bottom = 204.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 
-[node name="休息提醒" type="Node2D" parent="."]
+[node name="休息提醒" type="Node2D" parent="." unique_id=1124198940]
 visible = false
-position = Vector2(-111, 86)
+position = Vector2(2, 5)
 
-[node name="Sprite2D" type="Sprite2D" parent="休息提醒"]
+[node name="Sprite2D" type="Sprite2D" parent="休息提醒" unique_id=141062750]
 position = Vector2(458, 208)
 scale = Vector2(1.14922, 0.748437)
 texture = ExtResource("6_2ht62")
 
-[node name="Label" type="Label" parent="休息提醒/Sprite2D"]
+[node name="Label" type="Label" parent="休息提醒/Sprite2D" unique_id=703323372]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -244,60 +244,67 @@ size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "工作时间结束，该休息啦！"
 
-[node name="yes_btn" type="Button" parent="休息提醒/Sprite2D"]
+[node name="yes_btn" type="Button" parent="休息提醒/Sprite2D" unique_id=1511305409]
 offset_left = -34.915
 offset_top = -24.0501
 offset_right = 8.085
 offset_bottom = 4.94989
-theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_styles/pressed = SubResource("StyleBoxFlat_087ws")
+theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_inwfv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_087ws")
 text = "yes"
 
-[node name="no_btn" type="Button" parent="休息提醒/Sprite2D"]
+[node name="no_btn" type="Button" parent="休息提醒/Sprite2D" unique_id=367684353]
 offset_left = 33.6492
 offset_top = -24.0
 offset_right = 76.6492
 offset_bottom = 5.0
-theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_styles/pressed = SubResource("StyleBoxFlat_cmtgg")
+theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_5qeau")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cmtgg")
 text = "no"
 
-[node name="休息框" type="Node2D" parent="."]
+[node name="休息框" type="Node2D" parent="." unique_id=1889092958]
 visible = false
-position = Vector2(27, 112)
+position = Vector2(-36, 47)
 
-[node name="Sprite2D" type="Sprite2D" parent="休息框"]
-position = Vector2(278.799, 8.7229)
-scale = Vector2(0.809849, 0.720852)
+[node name="Sprite2D" type="Sprite2D" parent="休息框" unique_id=1190062789]
+position = Vector2(349, -52)
+scale = Vector2(1.10709, 0.938795)
 texture = ExtResource("21_087ws")
 
-[node name="走" type="Button" parent="休息框/Sprite2D"]
-offset_left = -183.737
-offset_top = 23.9676
-offset_right = -109.737
-offset_bottom = 54.9676
+[node name="关灯" type="Button" parent="休息框/Sprite2D" unique_id=887095326]
+offset_left = -176.756
+offset_top = 25.6074
+offset_right = -103.756
+offset_bottom = 56.6074
+text = "关灯"
+
+[node name="走" type="Button" parent="休息框/Sprite2D" unique_id=893878495]
+offset_left = -79.4659
+offset_top = 24.4434
+offset_right = -5.46585
+offset_bottom = 55.4434
 text = "走一走
 "
 
-[node name="看" type="Button" parent="休息框/Sprite2D"]
-offset_left = -59.022
-offset_top = 23.9676
-offset_right = 9.97799
-offset_bottom = 54.9676
+[node name="看" type="Button" parent="休息框/Sprite2D" unique_id=520499016]
+offset_left = 16.3388
+offset_top = 24.4434
+offset_right = 85.3388
+offset_bottom = 55.4434
 text = "看一看"
 
-[node name="揉" type="Button" parent="休息框/Sprite2D"]
-offset_left = 59.5185
-offset_top = 23.9676
-offset_right = 127.519
-offset_bottom = 54.9676
+[node name="揉" type="Button" parent="休息框/Sprite2D" unique_id=505978624]
+offset_left = 108.43
+offset_top = 25.6074
+offset_right = 176.43
+offset_bottom = 56.6074
 text = "揉一揉"
 
-[node name="Label" type="Label" parent="休息框/Sprite2D"]
+[node name="Label" type="Label" parent="休息框/Sprite2D" unique_id=1318900392]
 offset_left = -211.541
 offset_top = -52.3099
 offset_right = 67.4589
@@ -306,16 +313,15 @@ scale = Vector2(2, 2)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "休息时间，该做些什么呢？"
 
-[node name="工作提醒" type="Node2D" parent="."]
+[node name="工作提醒" type="Node2D" parent="." unique_id=561094570]
 visible = false
-position = Vector2(-117, 107)
 
-[node name="Sprite2D" type="Sprite2D" parent="工作提醒"]
+[node name="Sprite2D" type="Sprite2D" parent="工作提醒" unique_id=2099070206]
 position = Vector2(458, 208)
 scale = Vector2(1.14922, 0.748437)
 texture = ExtResource("6_2ht62")
 
-[node name="Label" type="Label" parent="工作提醒/Sprite2D"]
+[node name="Label" type="Label" parent="工作提醒/Sprite2D" unique_id=223219618]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -332,37 +338,36 @@ size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "休息时间结束，是否回到工作"
 
-[node name="yes_btn2" type="Button" parent="工作提醒/Sprite2D"]
+[node name="yes_btn2" type="Button" parent="工作提醒/Sprite2D" unique_id=1649955317]
 offset_left = -34.915
 offset_top = -24.0501
 offset_right = 8.085
 offset_bottom = 4.94989
-theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_styles/pressed = SubResource("StyleBoxFlat_087ws")
+theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_inwfv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_087ws")
 text = "yes"
 
-[node name="no_btn2" type="Button" parent="工作提醒/Sprite2D"]
+[node name="no_btn2" type="Button" parent="工作提醒/Sprite2D" unique_id=1763613333]
 offset_left = 33.6492
 offset_top = -24.0
 offset_right = 76.6492
 offset_bottom = 5.0
-theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_styles/pressed = SubResource("StyleBoxFlat_cmtgg")
+theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_5qeau")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cmtgg")
 text = "no"
 
 [connection signal="animation_finished" from="人物本体" to="." method="_on_人物本体_animation_finished"]
 [connection signal="input_event" from="人物本体/Area2D" to="." method="_on_area_2d_input_event"]
-[connection signal="mouse_entered" from="人物本体/Area2D" to="." method="_on_area_2d_mouse_entered"]
-[connection signal="mouse_exited" from="人物本体/Area2D" to="." method="_on_area_2d_mouse_exited"]
 [connection signal="input_event" from="设置气泡/Area2D_2" to="." method="_on_area_2d_2_input_event"]
 [connection signal="mouse_entered" from="设置气泡/Area2D_2" to="." method="_on_area_2d_2_mouse_entered"]
 [connection signal="mouse_exited" from="设置气泡/Area2D_2" to="." method="_on_area_2d_2_mouse_exited"]
 [connection signal="pressed" from="休息提醒/Sprite2D/yes_btn" to="." method="_on_yes_btn_pressed"]
 [connection signal="pressed" from="休息提醒/Sprite2D/no_btn" to="." method="_on_no_btn_pressed"]
+[connection signal="pressed" from="休息框/Sprite2D/关灯" to="." method="_on_关灯_pressed"]
 [connection signal="pressed" from="休息框/Sprite2D/走" to="." method="_on_走_pressed"]
 [connection signal="pressed" from="休息框/Sprite2D/看" to="." method="_on_看_pressed"]
 [connection signal="pressed" from="休息框/Sprite2D/揉" to="." method="_on_揉_pressed"]
