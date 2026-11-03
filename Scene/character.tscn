@@ -192,6 +192,7 @@ position = Vector2(-36.8125, 5.875)
 shape = SubResource("RectangleShape2D_b6o27")
 
 [node name="设置气泡" type="AnimatedSprite2D" parent="." unique_id=2011406770]
+visible = false
 position = Vector2(211, 222)
 scale = Vector2(0.6, 0.6)
 sprite_frames = SubResource("SpriteFrames_1cgd8")

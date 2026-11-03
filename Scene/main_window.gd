@@ -7,9 +7,12 @@ var planned_rest_minutes = 5
 var current_log_file = ""
 
 # ================= 桌面穿透 系统 =================
-const HIT_MARGIN := 6.0  # 容错边界，防止边缘抖动
+const REGION_PADDING := 8.0  # 窗口区域在 UI 外的留边
 var _passthrough_api = null
-var _passthrough_active := false
+var _dim_window: Window
+var _dim_rect: ColorRect
+var _last_region_polygon := PackedVector2Array()
+var _region_ready := false
 
 #=====导出日志======
 func write_log(content: String):
@@ -34,11 +37,8 @@ func _ready():
 	var t = Time.get_datetime_dict_from_system()
 	current_log_file = "Log_%04d%02d%02d_%02d%02d%02d.txt" % [t.year, t.month, t.day, t.hour, t.minute, t.second]
 	
-	# 连接信号
-	var start_btn = $SettingPanel/Panel/work_btn
-	var rest_btn =  $SettingPanel/Panel/rest_btn
-	start_btn.pressed.connect(_on_start_button_pressed)	
-	rest_btn.pressed.connect(_on_exit_button_pressed)
+	# 连接信号（面板内部按钮由 setting_panel.gd 处理）
+	$SettingPanel.work_confirmed.connect(_on_work_confirmed)
 	rest_timer.timeout.connect(_on_rest_timer_timeout)
 	reminder_timer.timeout.connect(_on_reminder_timer_timeout)
 	
@@ -46,10 +46,10 @@ func _ready():
 	get_tree().root.transparent_bg = true
 	get_window().transparent = true
 
-	# 黑幕铺满整个窗口，并画在人物背后（不压暗小人）
-	$DarkOverlay.z_index = -1
-	get_window().size_changed.connect(_fit_dark_overlay)
-	_fit_dark_overlay.call_deferred()
+	# 旧的黑幕节点不再使用，黑幕改由独立的全屏窗口显示
+	var old_overlay := get_node_or_null("DarkOverlay") as CanvasItem
+	if old_overlay != null:
+		old_overlay.hide()
 	
 	# 快捷键
 	if not InputMap.has_action("quit"):
@@ -60,14 +60,12 @@ func _ready():
 		
 	$Character/人物本体.play("default")
 
-	# 记录面板相对人物的初始位置（以场景里的布局为准）
-	_panel_offset = $SettingPanel.global_position - $Character.global_position
-
 	# ⚠️ 初始化穿透插件
 	_passthrough_api = Engine.get_singleton("MousePassthrough") if Engine.has_singleton("MousePassthrough") else null
 	if _passthrough_api == null:
-		push_warning("MousePassthrough 插件未加载，桌面穿透不会生效")
-	_set_passthrough(true) # 开局默认穿透
+		push_warning("MousePassthrough 插件未加载，独立黑幕窗口不会启用")
+	_create_dim_window()  # 独立全屏黑幕窗口（常驻、点击穿透）
+	_update_window_region.call_deferred()  # 主窗口按 UI 区域裁剪
 
 # ================= 计时器调度 =================
 func start_reminder_timer():
@@ -85,61 +83,43 @@ func _on_reminder_timer_timeout():
 	elif $Character.is_waiting_for_work_choice:
 		$Character.cancel_rest_finished()
 
-#检测输入是否合法
-func get_valid_time(line_edit: LineEdit, default_val: float) -> float:
-	var text = line_edit.text.strip_edges()
-	if text == "":
-		return default_val
-		
-	if not text.is_valid_float():
-		return -1.0
-		
-	var val = float(text)
-	if val <= 0:
-		return -1.0
-	
-	return val
-	
-func _on_start_button_pressed():
-	var work_minutes = get_valid_time($SettingPanel/Panel/Label1/SpinBox1,45)
-	var rest_minutes = get_valid_time($SettingPanel/Panel/Label2/SpinBox2,15)
+#================ 设置面板回调 =============
+func prepare_work_start() -> void:
+	set_dim(false)
+	$Character/休息框.hide()
 
-	#报错显示
-	if work_minutes == -1.0 or rest_minutes == -1.0:
-		print("检测到无效输入")
-		$SettingPanel/Panel/ErrorLabel.show()
-		return 
-		
-	$SettingPanel/Panel/ErrorLabel.hide()
-	$SettingPanel.hide()
+func _on_work_confirmed(work_minutes: float, rest_minutes: float) -> void:
 	rest_timer.stop()
 	reminder_timer.stop()
 	$WorkTimer.wait_time = work_minutes * 60
 	$WorkTimer.start()
 	$UITimer.start()
 	write_log("开始工作！工作时间：%s分钟，休息时间：%s分钟" % [work_minutes, rest_minutes])
-
-func _on_exit_button_pressed():
-	$SettingPanel.hide()
+	if $SettingPanel.is_idle_animation_enabled():
+		$Character/人物本体.play("default")
+	else:
+		$Character/人物本体.animation = "default"
+		$Character/人物本体.frame = 0
+		$Character/人物本体.stop()
 
 func _on_work_timer_timeout():
 	$Character.start_tried_reminder()
-	write_log("休息时间到")
+	write_log("休息时间到！")
 	$UITimer.stop()
-	$DarkOverlay.show()#屏幕变暗提醒
+	set_dim(true) # 屏幕变暗提醒
 
 func start_rest_timer():
 	work_timer.stop()
 	reminder_timer.stop()
-	planned_rest_minutes = get_valid_time($SettingPanel/Panel/Label2/SpinBox2, 15)
-	if planned_rest_minutes == -1.0: planned_rest_minutes = 15 
+	planned_rest_minutes = $SettingPanel.get_rest_minutes()
+	if planned_rest_minutes == -1.0: planned_rest_minutes = 15.0
 	rest_timer.start(planned_rest_minutes * 60)
 	$UITimer.start()
 
 func _on_rest_timer_timeout():
 	rest_timer.stop()
 	$UITimer.stop()
-	$DarkOverlay.hide()
+	set_dim(false)
 	$Character/休息框.hide()
 	$Character.reset_light_state()
 	$Character.show_rest_finished_bubble()
@@ -147,12 +127,17 @@ func _on_rest_timer_timeout():
 func start_work_timer_again():
 	rest_timer.stop()
 	reminder_timer.stop()
-	var work_minutes = get_valid_time($SettingPanel/Panel/Label1/SpinBox1,45)
-	if work_minutes == -1.0: work_minutes = 45
+	var work_minutes = $SettingPanel.get_work_minutes()
+	if work_minutes == -1.0: work_minutes = 45.0
 	work_timer.wait_time = work_minutes * 60
 	work_timer.start()
 	$UITimer.start()
-	$Character/人物本体.play("default")
+	if $SettingPanel.is_idle_animation_enabled():
+		$Character/人物本体.play("default")
+	else:
+		$Character/人物本体.animation = "default"
+		$Character/人物本体.frame = 0
+		$Character/人物本体.stop()
 	write_log("选择继续工作！")
 
 func _unhandled_input(event):
@@ -171,72 +156,160 @@ func _on_ui_timer_timeout() -> void:
 		var s = int(left_time) % 60
 		$Character/TimerBubble/TimeLabel.text = "%02d:%02d" % [m, s]
 
-# ================= 关灯黑幕 =================
-func _fit_dark_overlay() -> void:
-	$DarkOverlay.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-	$DarkOverlay.global_position = Vector2.ZERO
-	$DarkOverlay.size = get_viewport().get_visible_rect().size
+# ================= 关灯黑幕（独立全屏窗口） =================
+func _create_dim_window() -> void:
+	# 没有穿透插件时不创建独立黑幕，避免全屏窗口挡住所有点击
+	if _passthrough_api == null:
+		return
 
-# ================= 设置面板跟随 =================
-var _panel_offset := Vector2.ZERO
+	var dim_color := Color(0.49, 0.46501, 0.4018, 0.352941)
+	var old_overlay := get_node_or_null("DarkOverlay") as ColorRect
+	if old_overlay != null:
+		dim_color = old_overlay.color
 
-# ================= 桌面穿透 (每帧 AABB 检测) =================
+	var screen := DisplayServer.window_get_current_screen()
+	var screen_pos := DisplayServer.screen_get_position(screen)
+	var screen_size := DisplayServer.screen_get_size(screen)
+
+	_dim_window = Window.new()
+	_dim_window.name = "DimWindow"
+	_dim_window.visible = false
+	# 确保是独立原生窗口，避免被嵌入主窗口
+	if _dim_window.get("force_native") != null:
+		_dim_window.set("force_native", true)
+	_dim_window.set_flag(Window.FLAG_BORDERLESS, true)
+	_dim_window.set_flag(Window.FLAG_ALWAYS_ON_TOP, true)
+	_dim_window.set_flag(Window.FLAG_TRANSPARENT, true)
+	_dim_window.set_flag(Window.FLAG_NO_FOCUS, true)
+	_dim_window.transparent_bg = true
+	_dim_window.position = screen_pos
+	_dim_window.size = screen_size
+
+	_dim_rect = ColorRect.new()
+	_dim_rect.name = "DimRect"
+	_dim_rect.color = dim_color
+	_dim_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_dim_rect.visible = false
+	_dim_window.add_child(_dim_rect)
+	_dim_rect.position = Vector2.ZERO
+	_dim_rect.size = Vector2(screen_size)
+
+	add_child(_dim_window)
+	_dim_window.show()
+	_setup_dim_passthrough()
+
+func _setup_dim_passthrough() -> void:
+	# 显示窗口后原生句柄才会出现，等它准备好再设置穿透
+	for i in 10:
+		if _dim_window == null:
+			return
+		var handle := DisplayServer.window_get_native_handle(
+			DisplayServer.WINDOW_HANDLE, _dim_window.get_window_id()
+		)
+		if handle != 0:
+			_passthrough_api.set_passthrough(_dim_window.get_window_id(), true)
+			return
+		await get_tree().process_frame
+	# 设置失败就关掉黑幕窗口，避免它挡住整个桌面
+	push_warning("黑幕窗口穿透设置失败，已禁用黑幕窗口")
+	_dim_window.hide()
+	_dim_window.queue_free()
+	_dim_window = null
+	_dim_rect = null
+
+func set_dim(enabled: bool) -> void:
+	if _dim_window != null and _dim_rect != null:
+		_dim_rect.visible = enabled
+		return
+	# 插件不可用时退回窗口内的旧黑幕
+	var old_overlay := get_node_or_null("DarkOverlay") as ColorRect
+	if old_overlay != null:
+		old_overlay.visible = enabled
+
+func is_dim_visible() -> bool:
+	if _dim_window != null and _dim_rect != null:
+		return _dim_rect.visible
+	var old_overlay := get_node_or_null("DarkOverlay") as ColorRect
+	return old_overlay != null and old_overlay.visible
+
+# ================= 静态窗口穿透区域 =================
 func _process(_delta: float) -> void:
-	# 设置面板保持在人物旁边的相对位置
-	if $SettingPanel.visible:
-		$SettingPanel.global_position = $Character.global_position + _panel_offset
-	_update_passthrough()
+	_update_window_region()
 
-func _update_passthrough() -> void:
-	var want := not _mouse_on_interactive_ui()
-	if want != _passthrough_active:
-		_set_passthrough(want)
+func _update_window_region() -> void:
+	# 插件不可用时保持旧黑幕兜底，不裁剪窗口
+	if _passthrough_api == null:
+		return
 
-func _set_passthrough(enabled: bool) -> void:
-	_passthrough_active = enabled
-	if _passthrough_api != null:
-		_passthrough_api.set_passthrough(get_window().get_window_id(), enabled)
-
-func _mouse_on_interactive_ui() -> bool:
-	# 1. 拖拽中必须始终能接收鼠标
-	if $Character.is_dragging:
-		return true
-
-	# 2. 弹窗打开时先整窗接收鼠标
+	# 内嵌弹窗（比如导出日志的 FileDialog）打开时，临时取消区域裁剪
 	for node in find_children("*", "Window", true, false):
 		var w := node as Window
-		if w != null and w.visible and w.is_embedded():
-			return true
+		if w != null and w != _dim_window and w.visible and w.is_embedded():
+			_set_region_polygon(PackedVector2Array())
+			return
 
-	# 3. 遍历所有活跃的 UI 框，看鼠标在不在里面
-	var mouse := mouse_pos_in_viewport()
+	var bounds := _get_ui_region_rect()
+	if bounds.size == Vector2.ZERO:
+		_set_region_polygon(PackedVector2Array())
+		return
+	_set_region_polygon(PackedVector2Array([
+		bounds.position,
+		Vector2(bounds.end.x, bounds.position.y),
+		bounds.end,
+		Vector2(bounds.position.x, bounds.end.y),
+	]))
+
+func _set_region_polygon(polygon: PackedVector2Array) -> void:
+	if _region_ready and polygon == _last_region_polygon:
+		return
+	_last_region_polygon = polygon
+	_region_ready = true
+	get_window().set_mouse_passthrough_polygon(polygon)
+
+func _get_ui_region_rect() -> Rect2:
+	var bounds := Rect2()
+	var has_bounds := false
 	for rect in _get_interactive_rects():
 		if rect.size == Vector2.ZERO:
 			continue
-		if rect.grow(HIT_MARGIN).has_point(mouse):
-			return true
-	return false
+		if not has_bounds:
+			bounds = rect
+			has_bounds = true
+		else:
+			bounds = bounds.merge(rect)
+	if not has_bounds:
+		return Rect2()
+	bounds = bounds.grow(REGION_PADDING)
+	var window_rect := Rect2(Vector2.ZERO, Vector2(get_window().size))
+	return bounds.intersection(window_rect)
 
 func _get_interactive_rects() -> Array[Rect2]:
 	var rects: Array[Rect2] = []
 	var ch: Node = $Character
 
-	# 人物本体碰撞框
+	# 人物本体：碰撞框 + 所有动画帧的可见范围
 	var body_shape = ch.get_node_or_null("人物本体/Area2D/CollisionShape2D") as CollisionShape2D
-	if body_shape: 
+	if body_shape:
 		rects.append(shape_rect(body_shape))
+	var body_sprite = ch.get_node_or_null("人物本体") as AnimatedSprite2D
+	if body_sprite:
+		rects.append(animated_sprite_rect(body_sprite))
 
-	# 设置气泡碰撞框
-	var icon = ch.get_node_or_null("设置气泡") as CanvasItem
-	if icon and icon.is_visible_in_tree():
-		var icon_shape = ch.get_node_or_null("设置气泡/Area2D_2/CollisionShape2D") as CollisionShape2D
-		if icon_shape: rects.append(shape_rect(icon_shape))
+	# 设置气泡：区域始终包含，避免悬停显隐导致窗口区域频繁变化
+	var icon_shape = ch.get_node_or_null("设置气泡/Area2D_2/CollisionShape2D") as CollisionShape2D
+	if icon_shape:
+		rects.append(shape_rect(icon_shape))
+	var icon_sprite = ch.get_node_or_null("设置气泡") as AnimatedSprite2D
+	if icon_sprite:
+		rects.append(animated_sprite_rect(icon_sprite))
 
-	# 计时气泡
-	var timer_bubble := ch.get_node_or_null("TimerBubble") as CanvasItem
-	if timer_bubble and timer_bubble.is_visible_in_tree():
-		var tb_sprite = ch.get_node_or_null("TimerBubble/Sprite2D") as Sprite2D
-		if tb_sprite: rects.append(sprite_rect(tb_sprite))
+	# 计时气泡：始终包含，避免拖动时窗口区域变化
+	var tb_sprite = ch.get_node_or_null("TimerBubble/Sprite2D") as Sprite2D
+	if tb_sprite:
+		rects.append(sprite_rect(tb_sprite))
+	var tb_label = ch.get_node_or_null("TimerBubble/TimeLabel") as Control
+	if tb_label:
+		rects.append(control_rect(tb_label))
 
 	# 各种提醒框（气泡底图 + 里面所有UI控件）
 	for path in ["休息提醒", "工作提醒", "休息框"]:
@@ -276,6 +349,31 @@ func shape_rect(shape_node: CollisionShape2D) -> Rect2:
 func sprite_rect(sprite: Sprite2D) -> Rect2:
 	if sprite == null: return Rect2()
 	return local_rect_to_viewport(sprite, sprite.get_rect())
+
+func animated_sprite_rect(sprite: AnimatedSprite2D) -> Rect2:
+	if sprite == null or sprite.sprite_frames == null:
+		return Rect2()
+	var bounds := Rect2()
+	var has_bounds := false
+	for anim in sprite.sprite_frames.get_animation_names():
+		for i in sprite.sprite_frames.get_frame_count(anim):
+			var tex := sprite.sprite_frames.get_frame_texture(anim, i)
+			if tex == null:
+				continue
+			var tex_size := tex.get_size()
+			var rect: Rect2
+			if sprite.centered:
+				rect = Rect2(-tex_size / 2.0 + sprite.offset, tex_size)
+			else:
+				rect = Rect2(sprite.offset, tex_size)
+			if not has_bounds:
+				bounds = rect
+				has_bounds = true
+			else:
+				bounds = bounds.merge(rect)
+	if not has_bounds:
+		return Rect2()
+	return local_rect_to_viewport(sprite, bounds)
 
 func control_rect(control: Control) -> Rect2:
 	if control == null: return Rect2()

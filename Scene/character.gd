@@ -11,7 +11,7 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			is_dragging = true
-			drag_offset = global_position - get_parent().mouse_pos_in_viewport()
+			drag_offset = get_window().position - DisplayServer.mouse_get_position()
 			var main = get_parent()
 			if main.get_node("WorkTimer").time_left > 0 or main.get_node("RestTimer").time_left > 0:
 				$TimerBubble.show()
@@ -43,9 +43,9 @@ func _process(delta):
 		if hide_timer <= 0 and icon_area.visible:
 			icon_area.hide()
 
-	# 拖拽角色（全屏窗口下窗口本身不再移动）
+	# 拖拽整个窗口
 	if is_dragging:
-		global_position = get_parent().mouse_pos_in_viewport() + drag_offset
+		get_window().position = DisplayServer.mouse_get_position() + drag_offset
 
 # 点击图标打开设置面板（不需要再写穿透）
 func _on_area_2d_2_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
@@ -62,10 +62,11 @@ func start_tried_reminder():
 	get_parent().start_reminder_timer()
 
 func _on_yes_btn_pressed() -> void:
+	print("选择了休息")
+	get_parent().write_log("选择了休息")
 	is_waiting_for_choice = false
 	get_parent().stop_reminder_timer() 
 	$"休息提醒".hide()
-	get_parent().write_log("休息时间到！")
 	$"人物本体".play("default")
 	$"休息框".show()
 	get_parent().start_rest_timer()
@@ -77,28 +78,27 @@ func _on_no_btn_pressed() -> void:
 	is_waiting_for_choice = false
 	get_parent().stop_reminder_timer()
 	cancel_reminder()
-	get_parent().get_node("UITimer").start()
-	get_parent().get_node("DarkOverlay").hide()
-	
+	get_parent().start_work_timer_again() 
+
 func cancel_reminder():
 	is_waiting_for_choice = false
 	$"休息提醒".hide()
 	$"人物本体".play("default")
+	get_parent().set_dim(false)
 
 # ================= 休息框内的动作 =================
 var is_light_off = false	
 func _on_关灯_pressed() -> void:
 	get_parent().write_log("选择关灯")
 	var main = get_parent()
-	var overlay = main.get_node("DarkOverlay")
-	is_light_off = not overlay.visible 
+	is_light_off = not main.is_dim_visible()
 	if is_light_off:
 		$休息框/Sprite2D/关灯.text = "开灯"
-		overlay.show()
-		$"人物本体".play("light_off") 
+		main.set_dim(true)
+		$"人物本体".play("light_off")
 	else:
 		$休息框/Sprite2D/关灯.text = "关灯"
-		overlay.hide()
+		main.set_dim(false)
 		$"人物本体".play("light_on")
 
 func _on_人物本体_animation_finished() -> void:
@@ -106,6 +106,11 @@ func _on_人物本体_animation_finished() -> void:
 	if current_anim != "default":
 		$"人物本体".play("default")
 		$"休息框/Sprite2D/Label".text="休息时间，该做些什么呢？"	
+		var panel = get_parent().get_node_or_null("SettingPanel")
+		if panel != null:
+			var want_anim = panel.is_idle_animation_enabled()
+			if not want_anim and not $"休息框".visible:
+				$"人物本体".stop()
 
 func _on_走_pressed() -> void:
 	get_parent().write_log("选择走一走")

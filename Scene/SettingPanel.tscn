@@ -86,10 +86,10 @@ text = "  Start！"
 
 [node name="Label1" type="Label" parent="Panel" unique_id=549951968]
 layout_mode = 0
-offset_left = 122.85745
-offset_top = 224.28598
-offset_right = 374.85748
-offset_bottom = 274.286
+offset_left = 112.85751
+offset_top = 200.00027
+offset_right = 419.8575
+offset_bottom = 250.0003
 text = "WorkTime：               min"
 label_settings = SubResource("LabelSettings_6uyim")
 
@@ -120,22 +120,23 @@ theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_qkqw6")
 
 [node name="Label2" type="Label" parent="Panel" unique_id=406922438]
 layout_mode = 0
-offset_left = 134.28572
-offset_top = 307.14285
-offset_right = 386.2857
-offset_bottom = 357.14285
+offset_left = 125.71431
+offset_top = 255.7143
+offset_right = 420.7143
+offset_bottom = 305.7143
 text = "RestTime：               min"
 label_settings = SubResource("LabelSettings_6uyim")
 
 [node name="SpinBox2" type="LineEdit" parent="Panel/Label2" unique_id=1793853991]
 layout_mode = 0
-offset_left = 148.57112
+offset_left = 147.14255
 offset_top = -5.7145424
-offset_right = 244.57114
+offset_right = 243.14256
 offset_bottom = 47.142605
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_placeholder_color = Color(0.5921569, 0.5921569, 0.5921569, 1)
 theme_override_colors/caret_color = Color(0, 0, 0, 1)
+theme_override_constants/caret_width = 2
 theme_override_font_sizes/font_size = 23
 theme_override_styles/normal = SubResource("StyleBoxFlat_c2o7a")
 placeholder_text = "15.0"
@@ -158,11 +159,25 @@ text = "导出日志"
 visible = false
 layout_mode = 0
 offset_left = 178.57141
-offset_top = 367.14288
+offset_top = 311.4286
 offset_right = 364.2857
-offset_bottom = 392.85718
+offset_bottom = 337.14288
 scale = Vector2(1.325, 1.325)
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 text = "请输入合法数字哦！"
+
+[node name="AnimToggle" type="CheckButton" parent="Panel" unique_id=1806683665]
+layout_mode = 0
+offset_left = 115.714264
+offset_top = 351.4286
+offset_right = 259.71426
+offset_bottom = 387.14285
+scale = Vector2(1.32, 1.32)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/button_checked_color = Color(0.324, 0.6, 0.47580007, 1)
+text = "关闭待机动画"
 
 [connection signal="pressed" from="Panel/log_btn" to="." method="_on_log_btn_pressed"]
