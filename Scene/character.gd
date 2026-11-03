@@ -71,10 +71,10 @@ func _on_yes_btn_pressed() -> void:
 	$"休息框".show()
 	get_parent().start_rest_timer()
 	is_light_off = true
-	$"休息框/Sprite2D/关灯".text="开灯"
+	$"休息框/Sprite2D/buttons/关灯".text="开灯"
 
 func _on_no_btn_pressed() -> void:
-	get_parent().write_log("选择了不休息")
+	get_parent().write_log("选择了继续工作")
 	is_waiting_for_choice = false
 	get_parent().stop_reminder_timer()
 	cancel_reminder()
@@ -93,11 +93,11 @@ func _on_关灯_pressed() -> void:
 	var main = get_parent()
 	is_light_off = not main.is_dim_visible()
 	if is_light_off:
-		$休息框/Sprite2D/关灯.text = "开灯"
+		$"休息框/Sprite2D/buttons/关灯".text = "开灯"
 		main.set_dim(true)
 		$"人物本体".play("light_off")
 	else:
-		$休息框/Sprite2D/关灯.text = "关灯"
+		$"休息框/Sprite2D/buttons/关灯".text = "关灯"
 		main.set_dim(false)
 		$"人物本体".play("light_on")
 
@@ -123,10 +123,15 @@ func _on_看_pressed() -> void:
 	$"人物本体".play("look")
 
 func _on_揉_pressed() -> void:
-	get_parent().write_log("选择眼保健操")
-	$"休息框/Sprite2D/Label".text="做个眼保健操，缓解眼睛疲劳！"	
+	get_parent().write_log("选择按摩眼睛")
+	$"休息框/Sprite2D/Label".text="按摩眼睛，缓解眼睛疲劳！"	
 	$"人物本体".play("eye")
 
+func _on_活动_pressed() -> void:
+	get_parent().write_log("选择按摩眼睛")
+	$"休息框/Sprite2D/Label".text="转转手臂，活动肩颈！！"	
+	$"人物本体".play("row")
+	
 # ================= 休息时间结束的工作提醒 =================
 var is_waiting_for_work_choice = false
 func show_rest_finished_bubble():
@@ -137,14 +142,14 @@ func show_rest_finished_bubble():
 	get_parent().start_reminder_timer()
 
 func _on_yes_btn_2_pressed() -> void:
-	get_parent().write_log("用户开启工作！")
+	get_parent().write_log("选择了开启工作！")
 	is_waiting_for_work_choice = false
 	get_parent().stop_reminder_timer()
 	$"工作提醒".hide()
 	get_parent().start_work_timer_again()
 
 func _on_no_btn_2_pressed() -> void:
-	get_parent().write_log("用户继续休息！")
+	get_parent().write_log("选择了继续休息！")
 	is_waiting_for_work_choice = false
 	get_parent().stop_reminder_timer()
 	$"工作提醒".hide()
@@ -160,4 +165,4 @@ func cancel_rest_finished():
 
 func reset_light_state():
 	is_light_off = false
-	$休息框/Sprite2D/关灯.text = "关灯"
+	$"休息框/Sprite2D/buttons/关灯".text = "关灯"

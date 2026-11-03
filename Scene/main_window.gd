@@ -104,7 +104,7 @@ func _on_work_confirmed(work_minutes: float, rest_minutes: float) -> void:
 
 func _on_work_timer_timeout():
 	$Character.start_tried_reminder()
-	write_log("休息时间到！")
+	write_log("工作时间结束，该休息了！")
 	$UITimer.stop()
 	set_dim(true) # 屏幕变暗提醒
 
@@ -123,6 +123,7 @@ func _on_rest_timer_timeout():
 	$Character/休息框.hide()
 	$Character.reset_light_state()
 	$Character.show_rest_finished_bubble()
+	write_log("休息时间结束，该工作了！")
 
 func start_work_timer_again():
 	rest_timer.stop()
@@ -138,7 +139,6 @@ func start_work_timer_again():
 		$Character/人物本体.animation = "default"
 		$Character/人物本体.frame = 0
 		$Character/人物本体.stop()
-	write_log("选择继续工作！")
 
 func _unhandled_input(event):
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -162,7 +162,7 @@ func _create_dim_window() -> void:
 	if _passthrough_api == null:
 		return
 
-	var dim_color := Color(0.49, 0.46501, 0.4018, 0.352941)
+	var dim_color := Color(0.49, 0.49, 0.49, 0.353)
 	var old_overlay := get_node_or_null("DarkOverlay") as ColorRect
 	if old_overlay != null:
 		dim_color = old_overlay.color

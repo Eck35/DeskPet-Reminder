@@ -14,12 +14,14 @@
 [ext_resource type="Texture2D" uid="uid://dxuflcfgygfbv" path="res://Assets/关灯1.png" id="7_cp0d1"]
 [ext_resource type="Texture2D" uid="uid://xmfblhcsnuqe" path="res://Assets/开灯2.png" id="8_uk2ye"]
 [ext_resource type="Texture2D" uid="uid://db5wgsd3ypoqq" path="res://Assets/开灯3.png" id="9_v2g5y"]
-[ext_resource type="Texture2D" uid="uid://67xyrfqqheb5" path="res://Assets/跑步0.png" id="10_minn2"]
-[ext_resource type="Texture2D" uid="uid://dpa6jtjtiubmu" path="res://Assets/跑步1.png" id="11_kfm7y"]
-[ext_resource type="Texture2D" uid="uid://cgmj1u1s728wx" path="res://Assets/跑步2.png" id="12_73ll3"]
+[ext_resource type="Texture2D" uid="uid://bjxkq7bm3loh7" path="res://Assets/跑步0.png" id="10_minn2"]
+[ext_resource type="Texture2D" uid="uid://ga766f6q06aj" path="res://Assets/跑步1.png" id="11_kfm7y"]
+[ext_resource type="Texture2D" uid="uid://ceoyebcf5qrwp" path="res://Assets/跑步2.png" id="12_73ll3"]
 [ext_resource type="Texture2D" uid="uid://ymvhuc0wp7mj" path="res://Assets/看0.png" id="12_inwfv"]
 [ext_resource type="Texture2D" uid="uid://60mbvkyuo13j" path="res://Assets/看1.png" id="13_cmtgg"]
-[ext_resource type="Texture2D" uid="uid://bstik4vomatfi" path="res://Assets/跑步3.png" id="13_ljc6b"]
+[ext_resource type="Texture2D" uid="uid://csc1xmd3js30q" path="res://Assets/跑步3.png" id="13_ljc6b"]
+[ext_resource type="Texture2D" uid="uid://cvg0qsoh5yjh3" path="res://Assets/活动0.png" id="14_cmtgg"]
+[ext_resource type="Texture2D" uid="uid://4jqbsqba36by" path="res://Assets/活动1.png" id="15_5qeau"]
 [ext_resource type="Texture2D" uid="uid://cqldki2qfeb8a" path="res://Assets/休息框.png" id="21_087ws"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ep1am"]
@@ -56,7 +58,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"eye",
-"speed": 3.0
+"speed": 2.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -78,7 +80,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"light_off",
-"speed": 5.0
+"speed": 3.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -89,7 +91,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"light_on",
-"speed": 5.0
+"speed": 3.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -113,6 +115,29 @@ animations = [{
 "loop": false,
 "name": &"look",
 "speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_cmtgg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_5qeau")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_cmtgg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_5qeau")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_cmtgg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_5qeau")
+}],
+"loop": false,
+"name": &"row",
+"speed": 2.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -176,6 +201,47 @@ bg_color = Color(1, 0.32, 0.32, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmtgg"]
 bg_color = Color(0.6, 0.156, 0.156, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vm1eq"]
+bg_color = Color(0.9019608, 0.8352941, 0.72156864, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5q3im"]
+bg_color = Color(0.8162423, 0.71982986, 0.5533975, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u3qhk"]
+bg_color = Color(0.92941177, 0.8745098, 0.7921569, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xpnrx"]
+bg_color = Color(0.8162423, 0.71982986, 0.5533975, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_br8te"]
+bg_color = Color(0.92953676, 0.87270653, 0.79030895, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2v4cp"]
+bg_color = Color(0.8162423, 0.71982986, 0.5533975, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uqmib"]
+bg_color = Color(0.92953676, 0.87270653, 0.79030895, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vm1ue"]
+bg_color = Color(0.8162423, 0.71982986, 0.5533975, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8rlv"]
+bg_color = Color(0.92953676, 0.87270653, 0.79030895, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_670me"]
+bg_color = Color(0.8162423, 0.71982986, 0.5533975, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kt548"]
+bg_color = Color(0.92953676, 0.87270653, 0.79030895, 1)
+
 [node name="Character" type="Node2D" unique_id=1208928100]
 script = ExtResource("1_b6o27")
 
@@ -183,7 +249,6 @@ script = ExtResource("1_b6o27")
 position = Vector2(318, 250)
 scale = Vector2(0.6, 0.6)
 sprite_frames = SubResource("SpriteFrames_ep1am")
-animation = &"eye"
 
 [node name="Area2D" type="Area2D" parent="人物本体" unique_id=525573158]
 
@@ -276,43 +341,80 @@ position = Vector2(349, -52)
 scale = Vector2(1.10709, 0.938795)
 texture = ExtResource("21_087ws")
 
-[node name="关灯" type="Button" parent="休息框/Sprite2D" unique_id=887095326]
-offset_left = -176.756
-offset_top = 25.6074
-offset_right = -103.756
-offset_bottom = 56.6074
-text = "关灯"
-
-[node name="走" type="Button" parent="休息框/Sprite2D" unique_id=893878495]
-offset_left = -79.4659
-offset_top = 24.4434
-offset_right = -5.46585
-offset_bottom = 55.4434
-text = "走一走
-"
-
-[node name="看" type="Button" parent="休息框/Sprite2D" unique_id=520499016]
-offset_left = 16.3388
-offset_top = 24.4434
-offset_right = 85.3388
-offset_bottom = 55.4434
-text = "看一看"
-
-[node name="揉" type="Button" parent="休息框/Sprite2D" unique_id=505978624]
-offset_left = 108.43
-offset_top = 25.6074
-offset_right = 176.43
-offset_bottom = 56.6074
-text = "揉一揉"
-
 [node name="Label" type="Label" parent="休息框/Sprite2D" unique_id=1318900392]
-offset_left = -211.541
-offset_top = -52.3099
-offset_right = 67.4589
-offset_bottom = -8.30994
+offset_left = -202.50833
+offset_top = -61.896645
+offset_right = 76.49158
+offset_bottom = -17.896687
 scale = Vector2(2, 2)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "休息时间，该做些什么呢？"
+
+[node name="buttons" type="HBoxContainer" parent="休息框/Sprite2D" unique_id=641355946]
+offset_left = -220.3976
+offset_top = 15.97793
+offset_right = 173.6834
+offset_bottom = 68.766365
+scale = Vector2(1.13, 1.13)
+size_flags_horizontal = 3
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="关灯" type="Button" parent="休息框/Sprite2D/buttons" unique_id=887095326]
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0.52156866, 0.27450982, 0.31764707, 1)
+theme_override_colors/font_pressed_color = Color(0.52156866, 0.27450982, 0.31764707, 1)
+theme_override_colors/font_hover_color = Color(0.8020551, 0.512652, 0.5569023, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_vm1eq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5q3im")
+theme_override_styles/hover = SubResource("StyleBoxFlat_u3qhk")
+text = "关灯 "
+
+[node name="走" type="Button" parent="休息框/Sprite2D/buttons" unique_id=519661033]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0.52, 0.2756, 0.31633338, 1)
+theme_override_colors/font_pressed_color = Color(0.52156866, 0.27450982, 0.31764707, 1)
+theme_override_colors/font_hover_color = Color(0.8020551, 0.512652, 0.5569023, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_vm1eq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_xpnrx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_br8te")
+text = "走一走"
+
+[node name="看" type="Button" parent="休息框/Sprite2D/buttons" unique_id=124286066]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0.52, 0.2756, 0.31633338, 1)
+theme_override_colors/font_pressed_color = Color(0.52156866, 0.27450982, 0.31764707, 1)
+theme_override_colors/font_hover_color = Color(0.8020551, 0.512652, 0.5569023, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_vm1eq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2v4cp")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uqmib")
+text = "看一看"
+
+[node name="活动" type="Button" parent="休息框/Sprite2D/buttons" unique_id=1093655267]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0.52, 0.2756, 0.31633338, 1)
+theme_override_colors/font_pressed_color = Color(0.52156866, 0.27450982, 0.31764707, 1)
+theme_override_colors/font_hover_color = Color(0.8020551, 0.512652, 0.5569023, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_vm1eq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_vm1ue")
+theme_override_styles/hover = SubResource("StyleBoxFlat_j8rlv")
+text = "动一动"
+
+[node name="揉" type="Button" parent="休息框/Sprite2D/buttons" unique_id=840037752]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0.52, 0.2756, 0.31633338, 1)
+theme_override_colors/font_pressed_color = Color(0.52156866, 0.27450982, 0.31764707, 1)
+theme_override_colors/font_hover_color = Color(0.8020551, 0.512652, 0.5569023, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_vm1eq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_670me")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kt548")
+text = "揉一揉"
 
 [node name="工作提醒" type="Node2D" parent="." unique_id=561094570]
 visible = false
@@ -368,9 +470,10 @@ text = "no"
 [connection signal="mouse_exited" from="设置气泡/Area2D_2" to="." method="_on_area_2d_2_mouse_exited"]
 [connection signal="pressed" from="休息提醒/Sprite2D/yes_btn" to="." method="_on_yes_btn_pressed"]
 [connection signal="pressed" from="休息提醒/Sprite2D/no_btn" to="." method="_on_no_btn_pressed"]
-[connection signal="pressed" from="休息框/Sprite2D/关灯" to="." method="_on_关灯_pressed"]
-[connection signal="pressed" from="休息框/Sprite2D/走" to="." method="_on_走_pressed"]
-[connection signal="pressed" from="休息框/Sprite2D/看" to="." method="_on_看_pressed"]
-[connection signal="pressed" from="休息框/Sprite2D/揉" to="." method="_on_揉_pressed"]
+[connection signal="pressed" from="休息框/Sprite2D/buttons/关灯" to="." method="_on_关灯_pressed"]
+[connection signal="pressed" from="休息框/Sprite2D/buttons/走" to="." method="_on_走_pressed"]
+[connection signal="pressed" from="休息框/Sprite2D/buttons/看" to="." method="_on_看_pressed"]
+[connection signal="pressed" from="休息框/Sprite2D/buttons/活动" to="." method="_on_活动_pressed"]
+[connection signal="pressed" from="休息框/Sprite2D/buttons/揉" to="." method="_on_揉_pressed"]
 [connection signal="pressed" from="工作提醒/Sprite2D/yes_btn2" to="." method="_on_yes_btn_2_pressed"]
 [connection signal="pressed" from="工作提醒/Sprite2D/no_btn2" to="." method="_on_no_btn_2_pressed"]
