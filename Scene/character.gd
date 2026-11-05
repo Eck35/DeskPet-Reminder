@@ -2,24 +2,35 @@ extends Node2D
 
 var drag_offset = Vector2.ZERO
 var is_dragging = false
-
+var press_time = 0.0
 var hide_timer = 0.0
-
 @onready var icon_area = $"设置气泡"
 
 func _on_area_2d_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
+			press_time = Time.get_ticks_msec()
 			is_dragging = true
 			drag_offset = get_window().position - DisplayServer.mouse_get_position()
-			var main = get_parent()
-			if main.get_node("WorkTimer").time_left > 0 or main.get_node("RestTimer").time_left > 0:
-				$TimerBubble.show()
+			
 		else:
 			is_dragging = false
-			if $TimerBubble.visible:
-				await get_tree().create_timer(1).timeout
-				$TimerBubble.hide()
+			var duration = Time.get_ticks_msec() - press_time
+			#互动动画
+			if duration < 200:
+				if is_waiting_for_choice or is_waiting_for_work_choice:
+					return 
+				var current_anim = $"人物本体".animation
+				if current_anim in ["eye", "run", "look", "light_off", "light_on", "jump","row"]:
+					return 
+				$"人物本体".play("hello")
+				#显示倒计时
+				var main = get_parent()
+				if main.get_node("WorkTimer").time_left > 0 or main.get_node("RestTimer").time_left > 0:
+					$TimerBubble.show()
+					if $TimerBubble.visible:
+						await get_tree().create_timer(1).timeout
+						$TimerBubble.hide()
 		
 func _process(delta):
 	var main = get_parent()
@@ -42,7 +53,19 @@ func _process(delta):
 		hide_timer -= delta
 		if hide_timer <= 0 and icon_area.visible:
 			icon_area.hide()
-
+			
+	#气泡随状态动态变化
+	var is_working = main.get_node("WorkTimer").time_left > 0
+	var is_resting = main.get_node("RestTimer").time_left > 0
+	var current_text = "❓"
+	
+	if is_working:
+		current_text = "💻"
+	elif is_resting:
+		current_text = "💤"
+	if $设置气泡/Label.text != current_text:
+		$设置气泡/Label.text = current_text
+		
 	# 拖拽整个窗口
 	if is_dragging:
 		get_window().position = DisplayServer.mouse_get_position() + drag_offset
@@ -105,7 +128,7 @@ func _on_人物本体_animation_finished() -> void:
 	var current_anim = $"人物本体".animation
 	if current_anim != "default":
 		$"人物本体".play("default")
-		$"休息框/Sprite2D/Label".text="休息时间，该做些什么呢？"	
+		$"休息框/Sprite2D/Label".text="小小的放松时间，你来选择:"	
 		var panel = get_parent().get_node_or_null("SettingPanel")
 		if panel != null:
 			var want_anim = panel.is_idle_animation_enabled()
@@ -114,22 +137,22 @@ func _on_人物本体_animation_finished() -> void:
 
 func _on_走_pressed() -> void:
 	get_parent().write_log("选择走一走")
-	$"休息框/Sprite2D/Label".text="工作了这么久，起身走走吧！"	
+	$"休息框/Sprite2D/Label".text="起来慢慢走一走，舒展紧绷的身体"	
 	$"人物本体".play("run")
 
 func _on_看_pressed() -> void:
 	get_parent().write_log("选择看一看")
-	$"休息框/Sprite2D/Label".text="眺望远方，放松一下眼睛吧！"	
+	$"休息框/Sprite2D/Label".text="望向窗外，让眼睛好好歇一歇"	
 	$"人物本体".play("look")
 
 func _on_揉_pressed() -> void:
 	get_parent().write_log("选择按摩眼睛")
-	$"休息框/Sprite2D/Label".text="按摩眼睛，缓解眼睛疲劳！"	
+	$"休息框/Sprite2D/Label".text="轻轻揉揉眼周，赶走酸胀疲惫"	
 	$"人物本体".play("eye")
 
 func _on_活动_pressed() -> void:
 	get_parent().write_log("选择按摩眼睛")
-	$"休息框/Sprite2D/Label".text="转转手臂，活动肩颈！！"	
+	$"休息框/Sprite2D/Label".text="转动双肩，把积攒的疲惫松一松"	
 	$"人物本体".play("row")
 	
 # ================= 休息时间结束的工作提醒 =================

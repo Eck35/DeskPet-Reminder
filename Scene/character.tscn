@@ -11,7 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://dmyg7ilcsvs43" path="res://Assets/提示3.png" id="5_b1jne"]
 [ext_resource type="Texture2D" uid="uid://wuh0ll5wvsha" path="res://Assets/TimerBubble.png" id="6_2ht62"]
 [ext_resource type="Texture2D" uid="uid://dsnjk1psmbogw" path="res://Assets/关灯0.png" id="6_oncsw"]
+[ext_resource type="Texture2D" uid="uid://3wrus5325hwp" path="res://Assets/打招呼1.png" id="6_vm1eq"]
 [ext_resource type="Texture2D" uid="uid://dxuflcfgygfbv" path="res://Assets/关灯1.png" id="7_cp0d1"]
+[ext_resource type="Texture2D" uid="uid://b3ug3rxspag7i" path="res://Assets/打招呼2.png" id="7_u3qhk"]
 [ext_resource type="Texture2D" uid="uid://xmfblhcsnuqe" path="res://Assets/开灯2.png" id="8_uk2ye"]
 [ext_resource type="Texture2D" uid="uid://db5wgsd3ypoqq" path="res://Assets/开灯3.png" id="9_v2g5y"]
 [ext_resource type="Texture2D" uid="uid://bjxkq7bm3loh7" path="res://Assets/跑步0.png" id="10_minn2"]
@@ -59,6 +61,20 @@ animations = [{
 "loop": false,
 "name": &"eye",
 "speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_u3qhk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_vm1eq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_u3qhk")
+}],
+"loop": false,
+"name": &"hello",
+"speed": 3.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -181,7 +197,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("5_2ht62")
 }],
-"loop": true,
+"loop": false,
 "name": &"default",
 "speed": 1.0
 }]
@@ -190,16 +206,22 @@ animations = [{
 size = Vector2(174, 208)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inwfv"]
-bg_color = Color(0.4278, 0.93, 0.55335, 1)
+bg_color = Color(0.25109997, 0.93, 0.420825, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_087ws"]
 bg_color = Color(0.3306, 0.57, 0.1596, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_20bjg"]
+bg_color = Color(0.61, 1, 0.727, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5qeau"]
 bg_color = Color(1, 0.32, 0.32, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmtgg"]
 bg_color = Color(0.6, 0.156, 0.156, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rdj5n"]
+bg_color = Color(1, 0.498976, 0.43808395, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vm1eq"]
 bg_color = Color(0.9019608, 0.8352941, 0.72156864, 1)
@@ -242,6 +264,15 @@ bg_color = Color(0.8162423, 0.71982986, 0.5533975, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kt548"]
 bg_color = Color(0.92953676, 0.87270653, 0.79030895, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d23ij"]
+bg_color = Color(0, 0.5067462, 0.15870184, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kih5x"]
+bg_color = Color(0.61, 1, 0.727, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ehsw6"]
+bg_color = Color(1, 0.498976, 0.43808395, 1)
+
 [node name="Character" type="Node2D" unique_id=1208928100]
 script = ExtResource("1_b6o27")
 
@@ -249,6 +280,9 @@ script = ExtResource("1_b6o27")
 position = Vector2(318, 250)
 scale = Vector2(0.6, 0.6)
 sprite_frames = SubResource("SpriteFrames_ep1am")
+animation = &"hello"
+frame = 1
+frame_progress = 1.0
 
 [node name="Area2D" type="Area2D" parent="人物本体" unique_id=525573158]
 
@@ -257,17 +291,23 @@ position = Vector2(-36.8125, 5.875)
 shape = SubResource("RectangleShape2D_b6o27")
 
 [node name="设置气泡" type="AnimatedSprite2D" parent="." unique_id=2011406770]
-visible = false
-position = Vector2(211, 222)
-scale = Vector2(0.6, 0.6)
+position = Vector2(228, 177)
+scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_1cgd8")
-frame_progress = 0.490537
 
 [node name="Area2D_2" type="Area2D" parent="设置气泡" unique_id=1962785802]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="设置气泡/Area2D_2" unique_id=1957625846]
 position = Vector2(-56, -22)
 shape = SubResource("RectangleShape2D_bosnt")
+
+[node name="Label" type="Label" parent="设置气泡" unique_id=1164890600]
+offset_left = -98.00001
+offset_top = -102.0
+offset_right = -76.00001
+offset_bottom = -76.03947
+scale = Vector2(4, 4)
+text = "❓"
 
 [node name="TimerBubble" type="Node2D" parent="." unique_id=380327735]
 visible = false
@@ -289,8 +329,8 @@ visible = false
 position = Vector2(2, 5)
 
 [node name="Sprite2D" type="Sprite2D" parent="休息提醒" unique_id=141062750]
-position = Vector2(458, 208)
-scale = Vector2(1.14922, 0.748437)
+position = Vector2(448.00003, 175)
+scale = Vector2(1.090235, 0.7367185)
 texture = ExtResource("6_2ht62")
 
 [node name="Label" type="Label" parent="休息提醒/Sprite2D" unique_id=703323372]
@@ -299,13 +339,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -221.89
-offset_top = -226.806
-offset_right = -29.8895
-offset_bottom = -203.806
+offset_left = -226.95807
+offset_top = -229.2259
+offset_right = -34.95758
+offset_bottom = -206.2259
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.895, 1.49)
+scale = Vector2(1, 1.665)
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "工作时间结束，该休息啦！"
@@ -319,6 +359,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_inwfv")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_087ws")
+theme_override_styles/hover = SubResource("StyleBoxFlat_20bjg")
 text = "yes"
 
 [node name="no_btn" type="Button" parent="休息提醒/Sprite2D" unique_id=367684353]
@@ -330,6 +371,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_5qeau")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_cmtgg")
+theme_override_styles/hover = SubResource("StyleBoxFlat_rdj5n")
 text = "no"
 
 [node name="休息框" type="Node2D" parent="." unique_id=1889092958]
@@ -342,13 +384,14 @@ scale = Vector2(1.10709, 0.938795)
 texture = ExtResource("21_087ws")
 
 [node name="Label" type="Label" parent="休息框/Sprite2D" unique_id=1318900392]
-offset_left = -202.50833
-offset_top = -61.896645
-offset_right = 76.49158
-offset_bottom = -17.896687
+offset_left = -221.30089
+offset_top = -55.390156
+offset_right = 57.69902
+offset_bottom = -11.390198
 scale = Vector2(2, 2)
+size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "休息时间，该做些什么呢？"
+text = "小小的放松时间，你来选择"
 
 [node name="buttons" type="HBoxContainer" parent="休息框/Sprite2D" unique_id=641355946]
 offset_left = -220.3976
@@ -420,8 +463,8 @@ text = "揉一揉"
 visible = false
 
 [node name="Sprite2D" type="Sprite2D" parent="工作提醒" unique_id=2099070206]
-position = Vector2(458, 208)
-scale = Vector2(1.14922, 0.748437)
+position = Vector2(450.5624, 175.12503)
+scale = Vector2(1.102735, 0.7492184)
 texture = ExtResource("6_2ht62")
 
 [node name="Label" type="Label" parent="工作提醒/Sprite2D" unique_id=223219618]
@@ -430,16 +473,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -230.483
-offset_top = -224.134
-offset_right = -22.4826
-offset_bottom = -201.134
+offset_left = -227.61589
+offset_top = -229.57254
+offset_right = 12.3841095
+offset_bottom = -206.57254
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.856, 1.425)
+scale = Vector2(1, 1.664)
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "休息时间结束，是否回到工作"
+text = "休息时间结束，该工作啦！"
 
 [node name="yes_btn2" type="Button" parent="工作提醒/Sprite2D" unique_id=1649955317]
 offset_left = -34.915
@@ -449,7 +492,8 @@ offset_bottom = 4.94989
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_inwfv")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_087ws")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_d23ij")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kih5x")
 text = "yes"
 
 [node name="no_btn2" type="Button" parent="工作提醒/Sprite2D" unique_id=1763613333]
@@ -461,6 +505,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_5qeau")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_cmtgg")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ehsw6")
 text = "no"
 
 [connection signal="animation_finished" from="人物本体" to="." method="_on_人物本体_animation_finished"]
