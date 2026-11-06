@@ -169,6 +169,12 @@ func _on_yes_btn_2_pressed() -> void:
 	is_waiting_for_work_choice = false
 	get_parent().stop_reminder_timer()
 	$"工作提醒".hide()
+	#休息结束，发星
+	var main = get_parent()
+	if not main.cycle_rewarded:
+		main.add_star()
+		main.cycle_rewarded = true
+		
 	get_parent().start_work_timer_again()
 
 func _on_no_btn_2_pressed() -> void:

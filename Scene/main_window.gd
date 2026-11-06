@@ -5,6 +5,9 @@ extends Control
 @onready var rest_timer = $RestTimer
 var planned_rest_minutes = 5
 var current_log_file = ""
+#记录星星
+var star_count = 0
+var cycle_rewarded = false 
 
 # ================= 桌面穿透 系统 =================
 const REGION_PADDING := 8.0  # 窗口区域在 UI 外的留边
@@ -83,6 +86,17 @@ func _on_reminder_timer_timeout():
 	elif $Character.is_waiting_for_work_choice:
 		$Character.cancel_rest_finished()
 
+
+#===========发星函数=====================
+func add_star():
+	star_count += 1
+	print("🌟 获得一颗星！当前总数：", star_count)
+	
+	var star_label = $SettingPanel.get_node_or_null("Panel/StarLabel") # 假设你建了个叫 StarLabel 的标签
+	if star_label:
+		star_label.text = "⭐ : " + str(star_count)
+		
+		
 #================ 设置面板回调 =============
 func prepare_work_start() -> void:
 	set_dim(false)
@@ -91,6 +105,8 @@ func prepare_work_start() -> void:
 func _on_work_confirmed(work_minutes: float, rest_minutes: float) -> void:
 	rest_timer.stop()
 	reminder_timer.stop()
+	#重置发星状态
+	cycle_rewarded = false
 	$WorkTimer.wait_time = work_minutes * 60
 	$WorkTimer.start()
 	$UITimer.start()

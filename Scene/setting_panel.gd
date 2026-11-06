@@ -57,7 +57,7 @@ func _on_work_btn_pressed() -> void:
 
 func _on_rest_btn_pressed() -> void:
 	hide()
-
+				
 # ================= 导出日志 =================
 func _on_log_btn_pressed() -> void:
 	var main = get_parent()

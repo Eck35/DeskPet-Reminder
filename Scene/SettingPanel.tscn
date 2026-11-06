@@ -87,9 +87,9 @@ text = "  Start！"
 [node name="Label1" type="Label" parent="Panel" unique_id=549951968]
 layout_mode = 0
 offset_left = 112.85751
-offset_top = 200.00027
+offset_top = 200.0003
 offset_right = 419.8575
-offset_bottom = 250.0003
+offset_bottom = 250.00034
 text = "WorkTime：               min"
 label_settings = SubResource("LabelSettings_6uyim")
 
@@ -121,9 +121,9 @@ theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_qkqw6")
 [node name="Label2" type="Label" parent="Panel" unique_id=406922438]
 layout_mode = 0
 offset_left = 125.71431
-offset_top = 255.7143
+offset_top = 261.42856
 offset_right = 420.7143
-offset_bottom = 305.7143
+offset_bottom = 311.42856
 text = "RestTime：               min"
 label_settings = SubResource("LabelSettings_6uyim")
 
@@ -159,9 +159,9 @@ text = "导出日志"
 visible = false
 layout_mode = 0
 offset_left = 178.57141
-offset_top = 311.4286
+offset_top = 314.2857
 offset_right = 364.2857
-offset_bottom = 337.14288
+offset_bottom = 340.0
 scale = Vector2(1.325, 1.325)
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 text = "请输入合法数字哦！"
@@ -179,5 +179,16 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/button_checked_color = Color(0.324, 0.6, 0.47580007, 1)
 text = "关闭待机动画"
+
+[node name="StarLabel" type="Label" parent="Panel" unique_id=171182722]
+layout_mode = 0
+offset_left = 208.57138
+offset_top = 135.71428
+offset_right = 264.57138
+offset_bottom = 158.71428
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.30588236)
+text = "⭐ ： 0"
 
 [connection signal="pressed" from="Panel/log_btn" to="." method="_on_log_btn_pressed"]
