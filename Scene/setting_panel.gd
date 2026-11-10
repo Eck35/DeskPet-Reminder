@@ -5,9 +5,15 @@ signal work_confirmed(work_minutes: float, rest_minutes: float)
 var _follow_target: Node2D
 var _follow_offset := Vector2.ZERO
 
+#记录颜色状态
+var _is_pink_unlocked_ui = false
+var _current_skin_ui = "default"
+
 func _ready() -> void:
-	$Panel/work_btn.pressed.connect(_on_work_btn_pressed)
-	$Panel/rest_btn.pressed.connect(_on_rest_btn_pressed)
+	$Panel/SettingContent/work_btn.pressed.connect(_on_work_btn_pressed)
+	$Panel/SettingContent/rest_btn.pressed.connect(_on_rest_btn_pressed)
+	$Panel/ShopContent/back_btn.pressed.connect(_on_back_btn_pressed)
+	$Panel/ShopContent.hide()
 	_follow_target = get_parent().get_node_or_null("Character") as Node2D
 	_capture_follow_offset.call_deferred()
 
@@ -21,13 +27,13 @@ func _capture_follow_offset() -> void:
 
 # ================= 面板输入 =================
 func get_work_minutes() -> float:
-	return _get_valid_time($Panel/Label1/SpinBox1, 45.0)
+	return _get_valid_time($Panel/SettingContent/Label1/SpinBox1, 45.0)
 
 func get_rest_minutes() -> float:
-	return _get_valid_time($Panel/Label2/SpinBox2, 15.0)
+	return _get_valid_time($Panel/SettingContent/Label2/SpinBox2, 15.0)
 
 func is_idle_animation_enabled() -> bool:
-	return not $Panel/AnimToggle.button_pressed
+	return not $Panel/SettingContent/AnimToggle.button_pressed
 
 func _get_valid_time(line_edit: LineEdit, default_val: float) -> float:
 	var text := line_edit.text.strip_edges()
@@ -48,14 +54,16 @@ func _on_work_btn_pressed() -> void:
 	var rest_minutes := get_rest_minutes()
 	if work_minutes == -1.0 or rest_minutes == -1.0:
 		print("检测到无效输入")
-		$Panel/ErrorLabel.show()
+		$Panel/SettingContent/ErrorLabel.show()
 		return
 
-	$Panel/ErrorLabel.hide()
+	$Panel/SettingContent/ErrorLabel.hide()
 	hide()
 	work_confirmed.emit(work_minutes, rest_minutes)
 
 func _on_rest_btn_pressed() -> void:
+	$Panel/ShopContent.hide()
+	$Panel/SettingContent.show()
 	hide()
 				
 # ================= 导出日志 =================
@@ -80,3 +88,41 @@ func _on_log_btn_pressed() -> void:
 	)
 	add_child(dialog)
 	dialog.popup_centered(Vector2i(800, 600))
+
+
+func _on_shop_pressed() -> void:
+	$Panel/SettingContent.hide()
+	$Panel/ShopContent.show()
+	#数据刷新
+	var main = get_parent()
+	refresh_shop_ui(main.star_count, main.is_pink_unlocked, main.current_skin)
+
+func _on_back_btn_pressed() -> void:
+	$Panel/ShopContent.hide()
+	$Panel/SettingContent.show()
+
+func set_star_count(stars: int) -> void:
+	var text := "⭐ ： " + str(stars)
+	$Panel/SettingContent/StarLabel.text = text
+	$Panel/ShopContent/StarLabel.text = text
+
+#刷新
+func refresh_shop_ui(stars: int, is_pink_unlocked: bool, current_skin: String) -> void:
+	_is_pink_unlocked_ui = is_pink_unlocked
+	_current_skin_ui = current_skin
+	set_star_count(stars)
+
+	$Panel/ShopContent/HBoxContainer/white/check.visible = (current_skin == "default")
+	$Panel/ShopContent/HBoxContainer/pink/check.visible = (current_skin == "pink")
+	$Panel/ShopContent/HBoxContainer/pink/lock.visible = not is_pink_unlocked
+
+func _on_pink_pressed() -> void:
+	var main = get_parent()
+	main.buy_or_equip_skin("pink")
+	refresh_shop_ui(main.star_count, main.is_pink_unlocked, main.current_skin)
+
+
+func _on_white_pressed() -> void:
+	var main = get_parent()
+	main.buy_or_equip_skin("default")
+	refresh_shop_ui(main.star_count, main.is_pink_unlocked, main.current_skin)

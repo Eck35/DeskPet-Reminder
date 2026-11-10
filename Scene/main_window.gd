@@ -62,6 +62,7 @@ func _ready():
 		InputMap.action_add_event("quit", key_event)
 		
 	$Character/人物本体.play("default")
+	apply_skin()
 
 	# ⚠️ 初始化穿透插件
 	_passthrough_api = Engine.get_singleton("MousePassthrough") if Engine.has_singleton("MousePassthrough") else null
@@ -88,13 +89,10 @@ func _on_reminder_timer_timeout():
 
 
 #===========发星函数=====================
-func add_star():
+func add_star() -> void:
 	star_count += 1
 	print("🌟 获得一颗星！当前总数：", star_count)
-	
-	var star_label = $SettingPanel.get_node_or_null("Panel/StarLabel") # 假设你建了个叫 StarLabel 的标签
-	if star_label:
-		star_label.text = "⭐ : " + str(star_count)
+	$SettingPanel.set_star_count(star_count)
 		
 		
 #================ 设置面板回调 =============
@@ -142,6 +140,7 @@ func _on_rest_timer_timeout():
 	write_log("休息时间结束，该工作了！")
 
 func start_work_timer_again():
+	cycle_rewarded = false
 	rest_timer.stop()
 	reminder_timer.stop()
 	var work_minutes = $SettingPanel.get_work_minutes()
@@ -172,6 +171,51 @@ func _on_ui_timer_timeout() -> void:
 		var s = int(left_time) % 60
 		$Character/TimerBubble/TimeLabel.text = "%02d:%02d" % [m, s]
 
+# ================兑换==========================
+const PINK_SKIN_COST := 3
+const STICKMAN_SKIN_SHADER := preload("res://Assets/skins/stickman_recolor.gdshader")
+var is_pink_unlocked = false
+var current_skin = "default"
+var _skin_material: ShaderMaterial
+
+# 处理商城的购买/装备请求
+func buy_or_equip_skin(skin_name: String):
+	if skin_name == "default":
+		current_skin = "default"
+		apply_skin()
+
+	elif skin_name == "pink":
+		if is_pink_unlocked:
+			current_skin = "pink" # 已解锁，直接换
+			apply_skin()
+		elif star_count >= PINK_SKIN_COST:
+			star_count -= PINK_SKIN_COST # 扣星星
+			is_pink_unlocked = true
+			current_skin = "pink"
+			apply_skin()
+		else:
+			print("星星不够啦！")
+
+func _init_skin_material() -> void:
+	_skin_material = ShaderMaterial.new()
+	_skin_material.shader = STICKMAN_SKIN_SHADER
+	$Character/人物本体.material = _skin_material
+
+func apply_skin():
+	var chara := $Character/人物本体 as AnimatedSprite2D
+	chara.modulate = Color.WHITE
+	if _skin_material == null:
+		_init_skin_material()
+	if current_skin == "default":
+		_skin_material.set_shader_parameter("head_color", Color.WHITE)
+		_skin_material.set_shader_parameter("line_color", Color.BLACK)
+		_skin_material.set_shader_parameter("recolor_lines", false)
+	elif current_skin == "pink":
+		_skin_material.set_shader_parameter("head_color", Color("fac4ff"))
+		_skin_material.set_shader_parameter("line_color", Color("000000"))
+		_skin_material.set_shader_parameter("recolor_lines", true)
+		
+		
 # ================= 关灯黑幕（独立全屏窗口） =================
 func _create_dim_window() -> void:
 	# 没有穿透插件时不创建独立黑幕，避免全屏窗口挡住所有点击

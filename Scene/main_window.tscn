@@ -17,7 +17,7 @@ grow_vertical = 2
 script = ExtResource("1_aurhl")
 
 [node name="Character" parent="." unique_id=333513705 instance=ExtResource("1_wxieh")]
-position = Vector2(2388, -607)
+position = Vector2(2418, -608)
 
 [node name="SettingPanel" parent="." unique_id=546860912 instance=ExtResource("3_jp3cc")]
 visible = false
@@ -25,10 +25,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 2332.0
-offset_top = -663.0
-offset_right = -621.0
-offset_bottom = -2991.0
+offset_left = 2595.0
+offset_top = -698.0
+offset_right = -358.0
+offset_bottom = -3026.0
 grow_horizontal = 2
 grow_vertical = 2
 

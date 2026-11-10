@@ -26,6 +26,8 @@
 [ext_resource type="Texture2D" uid="uid://4jqbsqba36by" path="res://Assets/活动1.png" id="15_5qeau"]
 [ext_resource type="Texture2D" uid="uid://cqldki2qfeb8a" path="res://Assets/休息框.png" id="21_087ws"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vm1eq"]
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_ep1am"]
 animations = [{
 "frames": [{
@@ -277,12 +279,10 @@ bg_color = Color(1, 0.498976, 0.43808395, 1)
 script = ExtResource("1_b6o27")
 
 [node name="人物本体" type="AnimatedSprite2D" parent="." unique_id=369623886]
+material = SubResource("ShaderMaterial_vm1eq")
 position = Vector2(318, 250)
 scale = Vector2(0.6, 0.6)
 sprite_frames = SubResource("SpriteFrames_ep1am")
-animation = &"hello"
-frame = 1
-frame_progress = 1.0
 
 [node name="Area2D" type="Area2D" parent="人物本体" unique_id=525573158]
 

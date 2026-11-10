@@ -56,25 +56,94 @@ bg_color = Color(0.91, 0.74256, 0.4732, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vk7jq"]
 bg_color = Color(0.72, 0.60864, 0.3024, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iia6w"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oc8gf"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ltpf2"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pt330"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fe6n5"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fn27s"]
+bg_color = Color(0.46, 0.46, 0.46, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tqy4p"]
+bg_color = Color(0.8175209, 0.8175214, 0.8175211, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tkovl"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.1547884, 0.9639781, 7.70092e-07, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gb487"]
+bg_color = Color(0.9808333, 0.77, 1, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oqj3u"]
+bg_color = Color(0.6, 0.6, 0.6, 0.50980395)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cyr1q"]
+bg_color = Color(0.6, 0.6, 0.6, 0.26666668)
+
 [node name="SettingPanel" type="Control" unique_id=1013129505]
 layout_mode = 3
 anchors_preset = 0
+offset_left = 389.0
+offset_top = 173.0
+offset_right = 389.0
+offset_bottom = 173.0
 mouse_filter = 2
 script = ExtResource("1_eohg8")
 
 [node name="Panel" type="TextureRect" parent="." unique_id=1865520930]
 layout_mode = 0
-offset_left = -27.0
-offset_top = -45.999996
-offset_right = 607.0
-offset_bottom = 660.0
-scale = Vector2(0.7, 0.7)
+offset_left = -319.0
+offset_top = -175.99998
+offset_right = 315.0
+offset_bottom = 530.0
+scale = Vector2(1.005, 1.005)
 mouse_filter = 0
 texture = ExtResource("1_6uyim")
 
-[node name="work_btn" type="Button" parent="Panel" unique_id=1610963070]
+[node name="SettingContent" type="Control" parent="Panel" unique_id=2026418197]
+anchors_preset = 0
+offset_right = 509.99994
+offset_bottom = 658.5714
+
+[node name="work_btn" type="Button" parent="Panel/SettingContent" unique_id=1610963070]
 layout_mode = 0
-offset_left = 115.71429
+offset_left = 115.71428
 offset_top = 422.85718
 offset_right = 419.7143
 offset_bottom = 521.8572
@@ -84,16 +153,16 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_eohg8")
 theme_override_styles/hover = SubResource("StyleBoxFlat_eddde")
 text = "  Start！"
 
-[node name="Label1" type="Label" parent="Panel" unique_id=549951968]
+[node name="Label1" type="Label" parent="Panel/SettingContent" unique_id=549951968]
 layout_mode = 0
 offset_left = 112.85751
-offset_top = 200.0003
+offset_top = 205.71457
 offset_right = 419.8575
-offset_bottom = 250.00034
+offset_bottom = 255.7146
 text = "WorkTime：               min"
 label_settings = SubResource("LabelSettings_6uyim")
 
-[node name="SpinBox1" type="LineEdit" parent="Panel/Label1" unique_id=545208415]
+[node name="SpinBox1" type="LineEdit" parent="Panel/SettingContent/Label1" unique_id=545208415]
 layout_mode = 0
 offset_left = 159.99968
 offset_top = -5.7145424
@@ -109,25 +178,16 @@ placeholder_text = "45.0"
 virtual_keyboard_type = 2
 caret_blink = true
 
-[node name="rest_btn" type="Button" parent="Panel" unique_id=1237750508]
-layout_mode = 0
-offset_left = 388.0
-offset_top = 56.0
-offset_right = 511.0
-offset_bottom = 186.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_fitx8")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_qkqw6")
-
-[node name="Label2" type="Label" parent="Panel" unique_id=406922438]
+[node name="Label2" type="Label" parent="Panel/SettingContent" unique_id=406922438]
 layout_mode = 0
 offset_left = 125.71431
-offset_top = 261.42856
+offset_top = 268.5714
 offset_right = 420.7143
-offset_bottom = 311.42856
+offset_bottom = 318.5714
 text = "RestTime：               min"
 label_settings = SubResource("LabelSettings_6uyim")
 
-[node name="SpinBox2" type="LineEdit" parent="Panel/Label2" unique_id=1793853991]
+[node name="SpinBox2" type="LineEdit" parent="Panel/SettingContent/Label2" unique_id=1793853991]
 layout_mode = 0
 offset_left = 147.14255
 offset_top = -5.7145424
@@ -143,9 +203,54 @@ placeholder_text = "15.0"
 virtual_keyboard_type = 2
 caret_blink = true
 
-[node name="log_btn" type="Button" parent="Panel" unique_id=646388089]
+[node name="ErrorLabel" type="Label" parent="Panel/SettingContent" unique_id=1985173620]
+visible = false
 layout_mode = 0
-offset_left = 187.14287
+offset_left = 178.5714
+offset_top = 329.99994
+offset_right = 364.2857
+offset_bottom = 355.71423
+scale = Vector2(1.325, 1.325)
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "请输入合法数字哦！"
+
+[node name="AnimToggle" type="CheckButton" parent="Panel/SettingContent" unique_id=1806683665]
+layout_mode = 0
+offset_left = 115.714264
+offset_top = 361.4286
+offset_right = 259.71426
+offset_bottom = 397.14285
+scale = Vector2(1.32, 1.32)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/button_checked_color = Color(0.324, 0.6, 0.47580007, 1)
+text = "关闭待机动画"
+
+[node name="StarLabel" type="Label" parent="Panel/SettingContent" unique_id=171182722]
+layout_mode = 0
+offset_left = 202.85713
+offset_top = 135.7143
+offset_right = 258.85718
+offset_bottom = 158.7143
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.30588236)
+text = "⭐ ： 0"
+
+[node name="rest_btn" type="Button" parent="Panel/SettingContent" unique_id=1237750508]
+layout_mode = 0
+offset_left = 388.0
+offset_top = 56.0
+offset_right = 511.0
+offset_bottom = 186.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_fitx8")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_qkqw6")
+
+[node name="log_btn" type="Button" parent="Panel/SettingContent" unique_id=646388089]
+layout_mode = 0
+offset_left = 187.14285
 offset_top = 540.0
 offset_right = 342.85712
 offset_bottom = 579.9999
@@ -155,40 +260,132 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_vdubw")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_vk7jq")
 text = "导出日志"
 
-[node name="ErrorLabel" type="Label" parent="Panel" unique_id=1985173620]
+[node name="Shop" type="Button" parent="Panel/SettingContent" unique_id=1682572656]
+layout_mode = 0
+offset_left = 358.5714
+offset_top = 530.0
+offset_right = 388.5714
+offset_bottom = 561.0
+scale = Vector2(2, 2)
+theme_override_styles/normal = SubResource("StyleBoxFlat_iia6w")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oc8gf")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ltpf2")
+text = "🎁"
+
+[node name="ShopContent" type="Control" parent="Panel" unique_id=486654660]
 visible = false
-layout_mode = 0
-offset_left = 178.57141
-offset_top = 314.2857
-offset_right = 364.2857
-offset_bottom = 340.0
-scale = Vector2(1.325, 1.325)
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-text = "请输入合法数字哦！"
+anchors_preset = 0
+offset_left = 57.142826
+offset_top = 90.000015
+offset_right = 501.42853
+offset_bottom = 621.4286
 
-[node name="AnimToggle" type="CheckButton" parent="Panel" unique_id=1806683665]
+[node name="Title" type="Label" parent="Panel/ShopContent" unique_id=1674728878]
 layout_mode = 0
-offset_left = 115.714264
-offset_top = 351.4286
-offset_right = 259.71426
-offset_bottom = 387.14285
-scale = Vector2(1.32, 1.32)
+offset_left = 79.999985
+offset_top = 48.571423
+offset_right = 160.99998
+offset_bottom = 73.57143
+scale = Vector2(3, 3)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/button_checked_color = Color(0.324, 0.6, 0.47580007, 1)
-text = "关闭待机动画"
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "🎁 Shop"
 
-[node name="StarLabel" type="Label" parent="Panel" unique_id=171182722]
+[node name="StarLabel" type="Label" parent="Panel/ShopContent" unique_id=172397322]
 layout_mode = 0
-offset_left = 208.57138
-offset_top = 135.71428
-offset_right = 264.57138
-offset_bottom = 158.71428
+offset_left = 237.14285
+offset_top = 155.71428
+offset_right = 293.14294
+offset_bottom = 178.71428
 scale = Vector2(2, 2)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.30588236)
 text = "⭐ ： 0"
 
-[connection signal="pressed" from="Panel/log_btn" to="." method="_on_log_btn_pressed"]
+[node name="back_btn" type="Button" parent="Panel/ShopContent" unique_id=2124544445]
+layout_mode = 0
+offset_left = 44.28575
+offset_top = 407.14285
+offset_right = 74.28575
+offset_bottom = 438.14285
+scale = Vector2(2.5, 2.5)
+theme_override_styles/normal = SubResource("StyleBoxFlat_pt330")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fe6n5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fn27s")
+text = "🔙"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/ShopContent" unique_id=1666857073]
+layout_mode = 0
+offset_left = 64.28571
+offset_top = 204.2857
+offset_right = 405.71426
+offset_bottom = 252.85712
+theme_override_constants/separation = 25
+
+[node name="white" type="Button" parent="Panel/ShopContent/HBoxContainer" unique_id=1160960171]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_tqy4p")
+
+[node name="check" type="Label" parent="Panel/ShopContent/HBoxContainer/white" unique_id=2018702202]
+layout_mode = 0
+offset_left = 31.805298
+offset_top = 28.102352
+offset_right = 50.85292
+offset_bottom = 55.102352
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_tkovl")
+text = "√"
+horizontal_alignment = 1
+
+[node name="pink" type="Button" parent="Panel/ShopContent/HBoxContainer" unique_id=942687536]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_gb487")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oqj3u")
+
+[node name="lock" type="Label" parent="Panel/ShopContent/HBoxContainer/pink" unique_id=1607955355]
+layout_mode = 0
+offset_top = -1.4285717
+offset_right = 22.142853
+offset_bottom = 22.857141
+scale = Vector2(2, 2)
+theme_override_styles/normal = SubResource("StyleBoxFlat_cyr1q")
+text = "🔒"
+
+[node name="check" type="Label" parent="Panel/ShopContent/HBoxContainer/pink" unique_id=1137528203]
+visible = false
+layout_mode = 0
+offset_left = 31.805298
+offset_top = 28.102352
+offset_right = 50.85292
+offset_bottom = 55.102352
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_tkovl")
+text = "√"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="Panel/ShopContent" unique_id=1210917595]
+layout_mode = 0
+offset_left = 64.285706
+offset_top = 155.71428
+offset_right = 122.85713
+offset_bottom = 194.2857
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Color"
+
+[node name="Label2" type="Label" parent="Panel/ShopContent" unique_id=833579586]
+layout_mode = 0
+offset_left = 60.27011
+offset_top = 342.83575
+offset_right = 258.2701
+offset_bottom = 370.69644
+scale = Vector2(1.5, 1.5)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "三颗⭐可以兑换一种颜色哦"
+
+[connection signal="pressed" from="Panel/SettingContent/log_btn" to="." method="_on_log_btn_pressed"]
+[connection signal="pressed" from="Panel/SettingContent/Shop" to="." method="_on_shop_pressed"]
+[connection signal="pressed" from="Panel/ShopContent/HBoxContainer/white" to="." method="_on_white_pressed"]
+[connection signal="pressed" from="Panel/ShopContent/HBoxContainer/pink" to="." method="_on_pink_pressed"]
