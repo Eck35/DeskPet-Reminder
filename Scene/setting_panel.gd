@@ -6,17 +6,23 @@ var _follow_target: Node2D
 var _follow_offset := Vector2.ZERO
 
 #记录颜色状态
-var _is_pink_unlocked_ui = false
-var _current_skin_ui = "default"
+var _current_skin_ui = "white"
 
 func _ready() -> void:
 	$Panel/SettingContent/work_btn.pressed.connect(_on_work_btn_pressed)
-	$Panel/SettingContent/rest_btn.pressed.connect(_on_rest_btn_pressed)
+	$Panel/rest_btn.pressed.connect(_on_rest_btn_pressed)
 	$Panel/ShopContent/back_btn.pressed.connect(_on_back_btn_pressed)
 	$Panel/ShopContent.hide()
 	_follow_target = get_parent().get_node_or_null("Character") as Node2D
 	_capture_follow_offset.call_deferred()
+	call_deferred("_init_reward_ui")
 
+func _init_reward_ui() -> void:
+	var main = get_parent()
+	$Panel/SettingContent/AnimToggle2.button_pressed = main.reward_enabled
+	$Panel/SettingContent/Shop.visible = main.reward_enabled
+	$Panel/SettingContent/StarLabel.visible = main.reward_enabled
+	
 func _process(_delta: float) -> void:
 	if visible and _follow_target != null:
 		global_position = _follow_target.global_position + _follow_offset
@@ -93,9 +99,7 @@ func _on_log_btn_pressed() -> void:
 func _on_shop_pressed() -> void:
 	$Panel/SettingContent.hide()
 	$Panel/ShopContent.show()
-	#数据刷新
-	var main = get_parent()
-	refresh_shop_ui(main.star_count, main.is_pink_unlocked, main.current_skin)
+	refresh_shop_ui()
 
 func _on_back_btn_pressed() -> void:
 	$Panel/ShopContent.hide()
@@ -106,23 +110,85 @@ func set_star_count(stars: int) -> void:
 	$Panel/SettingContent/StarLabel.text = text
 	$Panel/ShopContent/StarLabel.text = text
 
-#刷新
-func refresh_shop_ui(stars: int, is_pink_unlocked: bool, current_skin: String) -> void:
-	_is_pink_unlocked_ui = is_pink_unlocked
-	_current_skin_ui = current_skin
-	set_star_count(stars)
 
-	$Panel/ShopContent/HBoxContainer/white/check.visible = (current_skin == "default")
-	$Panel/ShopContent/HBoxContainer/pink/check.visible = (current_skin == "pink")
-	$Panel/ShopContent/HBoxContainer/pink/lock.visible = not is_pink_unlocked
+# 遍历主窗口里的皮肤字典，自动更新对应的锁和勾
+func refresh_shop_ui() -> void:
+	var main = get_parent()
+	set_star_count(main.star_count)
+	
+	var container = $Panel/ShopContent/HBoxContainer
+	
+	# 直接遍历容器里的所有子节点
+	for skin_node in container.get_children():
+		var node_name = skin_node.name 
+		
+		# 如果这个名字在你的皮肤字典里存在
+		if main.skin_data.has(node_name):
+			# 更新勾号
+			var check = skin_node.get_node_or_null("check")
+			if check:
+				check.visible = (main.current_skin == node_name)
+				
+			# 更新锁
+			var lock = skin_node.get_node_or_null("lock")
+			if lock:
+				lock.visible = not main.skin_data[node_name]["unlocked"]
+
 
 func _on_pink_pressed() -> void:
 	var main = get_parent()
 	main.buy_or_equip_skin("pink")
-	refresh_shop_ui(main.star_count, main.is_pink_unlocked, main.current_skin)
-
+	refresh_shop_ui()
 
 func _on_white_pressed() -> void:
 	var main = get_parent()
-	main.buy_or_equip_skin("default")
-	refresh_shop_ui(main.star_count, main.is_pink_unlocked, main.current_skin)
+	main.buy_or_equip_skin("white")
+	refresh_shop_ui()
+
+
+func _on_blue_pressed() -> void:
+	var main = get_parent()
+	main.buy_or_equip_skin("blue")
+	refresh_shop_ui()
+
+func _on_green_pressed() -> void:
+	var main = get_parent()
+	main.buy_or_equip_skin("green")
+	refresh_shop_ui()
+
+func _on_yellow_pressed() -> void:
+	var main = get_parent()
+	main.buy_or_equip_skin("yellow")
+	refresh_shop_ui()
+
+func _on_red_pressed() -> void:
+	var main = get_parent()
+	main.buy_or_equip_skin("red")
+	refresh_shop_ui()
+
+func _on_purple_pressed() -> void:
+	var main = get_parent()
+	main.buy_or_equip_skin("purple")
+	refresh_shop_ui()
+	
+func _on_orange_pressed() -> void:
+	var main = get_parent()
+	main.buy_or_equip_skin("orange")
+	refresh_shop_ui()
+
+func _on_seablue_pressed() -> void:
+	var main = get_parent()
+	main.buy_or_equip_skin("seablue")
+	refresh_shop_ui()
+	
+func _on_anim_toggle_2_toggled(toggled_on: bool) -> void:
+	var main = get_parent()
+	main.reward_enabled = toggled_on
+	$Panel/SettingContent/Shop.visible = toggled_on
+	$Panel/SettingContent/StarLabel.visible = toggled_on
+	if not toggled_on:
+		main.current_skin = "white"
+		main.apply_skin()
+		main.save_game()
+	else:
+		pass

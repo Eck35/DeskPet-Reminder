@@ -30,6 +30,38 @@ func write_log(content: String):
 		file.store_line(time_str + content)
 		file.close()
 
+# ================= 存档系统 =================
+const SAVE_PATH = "user://save_data.ini"
+var reward_enabled = true 
+
+# 保存当前数据
+func save_game():
+	var config = ConfigFile.new()
+	config.set_value("player", "star_count", star_count)
+	config.set_value("player", "current_skin", current_skin)
+	config.set_value("player", "reward_enabled", reward_enabled)
+	for skin_name in skin_data.keys():
+		config.set_value("skins", skin_name, skin_data[skin_name]["unlocked"])
+		
+	config.save(SAVE_PATH)
+
+# 加载历史数据
+func load_game():
+	var config = ConfigFile.new()
+	if config.load(SAVE_PATH) == OK:
+		star_count = config.get_value("player", "star_count", 0)
+		current_skin = config.get_value("player", "current_skin", "white")
+		reward_enabled = config.get_value("player", "reward_enabled", true)
+		#关闭机制恢复默认皮肤
+		if not reward_enabled and current_skin != "white":
+			current_skin = "white"
+		$SettingPanel.set_star_count(star_count)
+		
+		#把保存的解锁状态重新塞回字典里
+		for skin_name in skin_data.keys():
+			skin_data[skin_name]["unlocked"] = config.get_value("skins", skin_name, skin_data[skin_name]["unlocked"])
+
+
 func _ready():
 	# 根 Control 不接收鼠标，否则会抢掉人物 Area2D 的点击
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -61,6 +93,7 @@ func _ready():
 		key_event.keycode = KEY_ESCAPE 
 		InputMap.action_add_event("quit", key_event)
 		
+	load_game()	
 	$Character/人物本体.play("default")
 	apply_skin()
 
@@ -90,9 +123,13 @@ func _on_reminder_timer_timeout():
 
 #===========发星函数=====================
 func add_star() -> void:
+	if not reward_enabled:
+		return
+		
 	star_count += 1
 	print("🌟 获得一颗星！当前总数：", star_count)
 	$SettingPanel.set_star_count(star_count)
+	save_game()
 		
 		
 #================ 设置面板回调 =============
@@ -171,30 +208,89 @@ func _on_ui_timer_timeout() -> void:
 		var s = int(left_time) % 60
 		$Character/TimerBubble/TimeLabel.text = "%02d:%02d" % [m, s]
 
-# ================兑换==========================
+
+# ================兑换皮肤========================
 const PINK_SKIN_COST := 3
 const STICKMAN_SKIN_SHADER := preload("res://Assets/skins/stickman_recolor.gdshader")
 var is_pink_unlocked = false
-var current_skin = "default"
+var current_skin = "white"
 var _skin_material: ShaderMaterial
+
+var skin_data = {
+	"white": {
+		"cost": 0,
+		"unlocked": true,
+		"head_color": Color.WHITE,
+		"line_color": Color.BLACK,
+	},
+	"pink": {
+		"cost": 3,
+		"unlocked": false,
+		"head_color": Color("fac2ffff"),
+		"line_color": Color.BLACK,
+	},
+	"blue":{
+		"cost": 3,
+		"unlocked":false,
+		"head_color":Color("b5faff"),
+		"line_color":Color.BLACK
+	},
+	"green":{
+		"cost": 3,
+		"unlocked":false,
+		"head_color":Color("477a47ff"),
+		"line_color":Color.BLACK
+	},
+	"yellow":{
+		"cost":3,
+		"unlocked":false,
+		"head_color":Color("fffd6e"),
+		"line_color":Color.BLACK
+	},
+	"red":{
+		"cost":3,
+		"unlocked":false,
+		"head_color":Color("d60004"),
+		"line_color":Color.BLACK
+	},
+	"purple":{
+		"cost":3,
+		"unlocked":false,
+		"head_color":Color("a8b1ff"),
+		"line_color":Color.BLACK
+	},
+	"orange":{
+		"cost":3,
+		"unlocked":false,
+		"head_color":Color("ff9757"),
+		"line_color":Color.BLACK
+	},
+	"seablue":{
+		"cost":3,
+		"unlocked":false,
+		"head_color":Color("2b75cf"),
+		"line_color":Color.BLACK
+	}
+}
 
 # 处理商城的购买/装备请求
 func buy_or_equip_skin(skin_name: String):
-	if skin_name == "default":
-		current_skin = "default"
+	var data = skin_data[skin_name]
+	
+	if data["unlocked"]:
+		current_skin = skin_name
 		apply_skin()
-
-	elif skin_name == "pink":
-		if is_pink_unlocked:
-			current_skin = "pink" # 已解锁，直接换
-			apply_skin()
-		elif star_count >= PINK_SKIN_COST:
-			star_count -= PINK_SKIN_COST # 扣星星
-			is_pink_unlocked = true
-			current_skin = "pink"
-			apply_skin()
-		else:
-			print("星星不够啦！")
+		save_game()
+		return
+	if star_count >= data["cost"]:
+		star_count -= data["cost"]
+		data["unlocked"] = true  
+		current_skin = skin_name
+		apply_skin()
+		save_game()
+		print("解锁成功：", skin_name)
+	else:
+		print("星星不够啦！需要 ", data["cost"], " 颗星。")
 
 func _init_skin_material() -> void:
 	_skin_material = ShaderMaterial.new()
@@ -206,14 +302,9 @@ func apply_skin():
 	chara.modulate = Color.WHITE
 	if _skin_material == null:
 		_init_skin_material()
-	if current_skin == "default":
-		_skin_material.set_shader_parameter("head_color", Color.WHITE)
-		_skin_material.set_shader_parameter("line_color", Color.BLACK)
-		_skin_material.set_shader_parameter("recolor_lines", false)
-	elif current_skin == "pink":
-		_skin_material.set_shader_parameter("head_color", Color("fac4ff"))
-		_skin_material.set_shader_parameter("line_color", Color("000000"))
-		_skin_material.set_shader_parameter("recolor_lines", true)
+	var data = skin_data[current_skin]
+	_skin_material.set_shader_parameter("head_color", data["head_color"])
+	_skin_material.set_shader_parameter("line_color", data["line_color"])
 		
 		
 # ================= 关灯黑幕（独立全屏窗口） =================
@@ -222,7 +313,7 @@ func _create_dim_window() -> void:
 	if _passthrough_api == null:
 		return
 
-	var dim_color := Color(0.49, 0.49, 0.49, 0.353)
+	var dim_color := Color(0.407, 0.407, 0.407, 0.686)
 	var old_overlay := get_node_or_null("DarkOverlay") as ColorRect
 	if old_overlay != null:
 		dim_color = old_overlay.color
@@ -291,6 +382,7 @@ func is_dim_visible() -> bool:
 		return _dim_rect.visible
 	var old_overlay := get_node_or_null("DarkOverlay") as ColorRect
 	return old_overlay != null and old_overlay.visible
+
 
 # ================= 静态窗口穿透区域 =================
 func _process(_delta: float) -> void:
